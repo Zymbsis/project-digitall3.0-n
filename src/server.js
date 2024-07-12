@@ -2,7 +2,7 @@ import express from 'express';
 import pino from 'pino-http';
 import cors from 'cors';
 import { env } from './utils/env.js';
-// import router from './routers/index.js';
+import router from './routers/index.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import cookieParser from 'cookie-parser';
@@ -32,7 +32,7 @@ export const startServer = () => {
   });
   // app.use('/uploads', express.static(UPLOAD_DIR));
   // app.use('/api-docs', swaggerDocs());
-  // app.use(router);
+  app.use(router);
 
   app.use('*', notFoundHandler);
   app.use(errorHandler);
