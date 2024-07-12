@@ -9,7 +9,7 @@ import {
 } from '../constants/index.js';
 import { SessionsCollection } from '../db/models/session.js';
 import jwt from 'jsonwebtoken';
-import { SMTP } from '../constants/index.js';
+import { SMTP } from '../constans/index.js';
 import { env } from '../utils/env.js';
 import { sendEmail } from '../utils/sendMail.js';
 import handlebars from 'handlebars';
