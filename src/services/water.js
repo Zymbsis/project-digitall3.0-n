@@ -44,7 +44,12 @@ export const getPortionsByDay = async (date) => {
     { $project: { _id: 0, date: 1, portions: 1, completionRate: 1 } },
   ]);
 
-  return result[0];
+  if (result.length) {
+    const [{ date, portions, completionRate }] = result;
+    return { date, portions, completionRate };
+  } else {
+    return { date, portions: [], completionRate: 0 };
+  }
 };
 
 export const getPortionsByMonth = async (date) => {
@@ -91,5 +96,6 @@ export const getPortionsByMonth = async (date) => {
       },
     },
   ]);
+
   return result;
 };
