@@ -6,6 +6,7 @@ description: Register a new user
 security:
   - bearerAuth: []
 requestBody:
+  required: true
   content:
     application/json:
       schema:
@@ -36,6 +37,10 @@ responses:
             data:
               type: object
               properties:
+                _id:
+                  description: New user id (auto-generated)
+                  type: string
+                  example: 666ed33db5653b741ac1b547
                 name:
                   description: New user name
                   type: string
@@ -44,10 +49,23 @@ responses:
                   description: New user email
                   type: string
                   example: email@me.com
-                _id:
-                  description: New user id (auto-generated)
+                gender:
                   type: string
-                  example: 666ed33db5653b741ac1b547
+                  enum: [man, woman]
+                  default: woman
+                dailyNorma:
+                  type: number
+                  default: 1500
+                weight:
+                  type: number
+                  default: 0
+                activeHours:
+                  type: number
+                  default: 0
+                avatar:
+                  type: string
+                  format: binary
+                  default: 'Here should be a placeholder image'
                 createdAt:
                   description: Timestamp (auto-generated)
                   type: string

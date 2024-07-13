@@ -3,7 +3,8 @@ tags:
 summary: Resfresh user session
 operationId: refreshUserSession
 description: Resfresh user session
-security: []
+security:
+  - bearerAuth: []
 parameters:
   - name: refreshToken
     in: cookie
