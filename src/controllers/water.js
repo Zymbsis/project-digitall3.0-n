@@ -82,14 +82,14 @@ export const getPortionsByDayController = async (req, res) => {
     params: { date },
   } = req;
 
-  const result = await getPortionsByDay(date);
+  const data = await getPortionsByDay(date);
 
   res.json({
     status: 200,
-    message: result.portions.length
+    message: data.portions.length
       ? 'Successfully found water portions for selected date'
       : 'No water portions found for selected date',
-    data: result,
+    data,
   });
 };
 
@@ -98,13 +98,13 @@ export const getPortionsByMonthController = async (req, res) => {
     params: { date },
   } = req;
 
-  const result = await getPortionsByMonth(date);
+  const data = await getPortionsByMonth(date);
 
   res.json({
     status: 200,
-    message: result.length
+    message: data.days.length
       ? 'Successfully found history for selected month'
       : 'No history found for selected month',
-    data: result,
+    data,
   });
 };

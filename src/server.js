@@ -1,13 +1,14 @@
 import express from 'express';
 import pino from 'pino-http';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
+
 import { env } from './utils/env.js';
 import router from './routers/index.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { errorHandler } from './middlewares/errorHandler.js';
-import cookieParser from 'cookie-parser';
+import { swaggerDocs } from './middlewares/swaggerDocs.js';
 // import { UPLOAD_DIR } from './constans/index.js';
-// import { swaggerDocs } from './middlewares/swaggerDocs.js';
 
 const port = Number(env('PORT', 3000));
 
@@ -29,7 +30,7 @@ export const startServer = () => {
   );
   app.use(cookieParser());
   // app.use('/uploads', express.static(UPLOAD_DIR));
-  // app.use('/api-docs', swaggerDocs());
+  app.use('/api-docs', swaggerDocs());
 
   app.use(router);
 
