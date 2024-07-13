@@ -1,6 +1,6 @@
-import multer from 'multer';
+// import multer from 'multer';
 
-const storage = multer.memoryStorage();
-const upload = multer({ storage });
+// const storage = multer.memoryStorage();
+// const upload = multer({ storage });
 
-export const uploadMiddleware = upload.single('photo');
+// export const uploadMiddleware = upload.single('photo');

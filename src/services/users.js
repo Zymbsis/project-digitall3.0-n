@@ -1,17 +1,17 @@
 import bcrypt from 'bcrypt';
 import createHttpError from 'http-errors';
 import { UsersCollection } from '../db/models/user.js';
-import { TEMPLATES_DIR } from '../constants/index.js';
 import { SessionsCollection } from '../db/models/session.js';
-import jwt from 'jsonwebtoken';
-import { SMTP } from '../constants/index.js';
-import { env } from '../utils/env.js';
-import { sendEmail } from '../utils/sendMail.js';
-import handlebars from 'handlebars';
-import path from 'node:path';
-import fs from 'node:fs/promises';
-import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { createSession } from '../utils/createSession.js';
+// import { TEMPLATES_DIR } from '../constants/index.js';
+// import jwt from 'jsonwebtoken';
+// import { SMTP } from '../constants/index.js';
+// import { env } from '../utils/env.js';
+// import { sendEmail } from '../utils/sendMail.js';
+// import handlebars from 'handlebars';
+// import path from 'node:path';
+// import fs from 'node:fs/promises';
+// import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 
 //REGISTER_USER//
 export const registerUser = async (payload) => {
@@ -71,81 +71,81 @@ export const refreshUserSession = async (sessionId, refreshToken) => {
   return newSession;
 };
 
-export const requestResetToken = ctrlWrapper(async (email) => {
-  const user = await UsersCollection.findOne({ email });
-  if (!user) {
-    throw createHttpError(404, 'User not found');
-  }
+// export const requestResetToken = ctrlWrapper(async (email) => {
+//   const user = await UsersCollection.findOne({ email });
+//   if (!user) {
+//     throw createHttpError(404, 'User not found');
+//   }
 
-  const resetToken = jwt.sign(
-    {
-      sub: user._id,
-      email,
-    },
-    env('JWT_SECRET'),
-    {
-      expiresIn: '5m',
-    },
-  );
+//   const resetToken = jwt.sign(
+//     {
+//       sub: user._id,
+//       email,
+//     },
+//     env('JWT_SECRET'),
+//     {
+//       expiresIn: '5m',
+//     },
+//   );
 
-  const resetPasswordLink = `${env(
-    'APP_DOMAIN',
-  )}/reset-password?token=${resetToken}`;
+//   const resetPasswordLink = `${env(
+//     'APP_DOMAIN',
+//   )}/reset-password?token=${resetToken}`;
 
-  await sendEmail({
-    from: env(SMTP.SMTP_FROM),
-    to: email,
-    subject: 'Reset your password',
-    html: `<p>Click <a href="${resetPasswordLink}">here</a> to reset your password!</p>`,
-  });
+//   await sendEmail({
+//     from: env(SMTP.SMTP_FROM),
+//     to: email,
+//     subject: 'Reset your password',
+//     html: `<p>Click <a href="${resetPasswordLink}">here</a> to reset your password!</p>`,
+//   });
 
-  const resetPasswordTemplatePath = path.join(
-    TEMPLATES_DIR,
-    'reset-password-email.html',
-  );
+//   const resetPasswordTemplatePath = path.join(
+//     TEMPLATES_DIR,
+//     'reset-password-email.html',
+//   );
 
-  const templateSource = (
-    await fs.readFile(resetPasswordTemplatePath)
-  ).toString();
+//   const templateSource = (
+//     await fs.readFile(resetPasswordTemplatePath)
+//   ).toString();
 
-  const template = handlebars.compile(templateSource);
-  const html = template({
-    name: user.name,
-    link: resetPasswordLink,
-  });
+//   const template = handlebars.compile(templateSource);
+//   const html = template({
+//     name: user.name,
+//     link: resetPasswordLink,
+//   });
 
-  await sendEmail({
-    from: env(SMTP.SMTP_FROM),
-    to: email,
-    subject: 'Reset your password',
-    html,
-  });
-});
+//   await sendEmail({
+//     from: env(SMTP.SMTP_FROM),
+//     to: email,
+//     subject: 'Reset your password',
+//     html,
+//   });
+// });
 
-export const resetPassword = async (payload) => {
-  let entries;
+// export const resetPassword = async (payload) => {
+//   let entries;
 
-  try {
-    entries = jwt.verify(payload.token, env('JWT_SECRET'));
-  } catch (err) {
-    if (err instanceof Error)
-      throw createHttpError(401, 'Token is expired or invalid.');
-    throw err;
-  }
+//   try {
+//     entries = jwt.verify(payload.token, env('JWT_SECRET'));
+//   } catch (err) {
+//     if (err instanceof Error)
+//       throw createHttpError(401, 'Token is expired or invalid.');
+//     throw err;
+//   }
 
-  const user = await UsersCollection.findOne({
-    email: entries.email,
-    _id: entries.sub,
-  });
+//   const user = await UsersCollection.findOne({
+//     email: entries.email,
+//     _id: entries.sub,
+//   });
 
-  if (!user) {
-    throw createHttpError(404, 'User not found');
-  }
+//   if (!user) {
+//     throw createHttpError(404, 'User not found');
+//   }
 
-  const encryptedPassword = await bcrypt.hash(payload.password, 10);
+//   const encryptedPassword = await bcrypt.hash(payload.password, 10);
 
-  await UsersCollection.updateOne(
-    { _id: user._id },
-    { password: encryptedPassword },
-  );
-};
+//   await UsersCollection.updateOne(
+//     { _id: user._id },
+//     { password: encryptedPassword },
+//   );
+// };
