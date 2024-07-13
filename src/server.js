@@ -8,7 +8,9 @@ import { errorHandler } from './middlewares/errorHandler.js';
 import cookieParser from 'cookie-parser';
 // import { UPLOAD_DIR } from './constans/index.js';
 // import { swaggerDocs } from './middlewares/swaggerDocs.js';
+
 const port = Number(env('PORT', 3000));
+
 export const startServer = () => {
   const app = express();
   app.use(
@@ -18,7 +20,6 @@ export const startServer = () => {
     }),
   );
   app.use(cors());
-  app.use(cookieParser());
   app.use(
     pino({
       transport: {
@@ -26,16 +27,15 @@ export const startServer = () => {
       },
     }),
   );
-
-  app.get('/', (req, res) => {
-    res.json({ message: 'Hello World!' });
-  });
+  app.use(cookieParser());
   // app.use('/uploads', express.static(UPLOAD_DIR));
   // app.use('/api-docs', swaggerDocs());
+
   app.use(router);
 
   app.use('*', notFoundHandler);
   app.use(errorHandler);
+
   app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);
   });

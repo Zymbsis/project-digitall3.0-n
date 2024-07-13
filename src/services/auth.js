@@ -9,7 +9,7 @@ import {
 } from '../constants/index.js';
 import { SessionsCollection } from '../db/models/session.js';
 import jwt from 'jsonwebtoken';
-import { SMTP } from '../constans/index.js';
+import { SMTP } from '../constants/index.js';
 import { env } from '../utils/env.js';
 import { sendEmail } from '../utils/sendMail.js';
 import handlebars from 'handlebars';
@@ -18,12 +18,14 @@ import fs from 'node:fs/promises';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 
 export const registerUser = async (payload) => {
-  const existingUser = await UsersCollection.findOne({ email: payload.email });
+  const { email, password } = payload;
+
+  const existingUser = await UsersCollection.findOne({ email });
   if (existingUser) {
     throw createHttpError(409, 'Email in use');
   }
 
-  const encryptedPassword = await bcrypt.hash(payload.password, 10);
+  const encryptedPassword = await bcrypt.hash(password, 10);
 
   const newUser = await UsersCollection.create({
     ...payload,
@@ -35,6 +37,7 @@ export const registerUser = async (payload) => {
 
   return userObject;
 };
+
 export const loginUser = async (payload) => {
   const user = await UsersCollection.findOne({ email: payload.email });
   if (!user) {

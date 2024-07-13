@@ -20,17 +20,21 @@ router.post(
   validateBody(registerUserSchema),
   ctrlWrapper(registerUserController),
 );
+
 router.post(
   '/login',
   validateBody(loginUserSchema),
   ctrlWrapper(loginUserController),
 );
+
 router.post('/logout', authenticate, ctrlWrapper(logoutUserController));
+
 router.post(
   '/refresh',
   authenticate,
   ctrlWrapper(refreshUserSessionController),
 );
+
 // router.post(
 //   '/send-reset-email',
 //   validateBody(requestResetEmailSchema),
