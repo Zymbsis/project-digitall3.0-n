@@ -1,0 +1,78 @@
+tags:
+  - Users
+summary: Register a new user
+operationId: registerUser
+description: Register a new user
+security:
+  - bearerAuth: []
+requestBody:
+  content:
+    application/json:
+      schema:
+        type: object
+        required: [email, password]
+        properties:
+          email:
+            description: User's email
+            type: string
+            example: bob@me.com
+          password:
+            description: Password
+            type: string
+            example: immortal
+responses:
+  '201':
+    description: Successfully registered a user!
+    content:
+      application/json:
+        schema:
+          properties:
+            status:
+              type: integer
+              example: 201
+            message:
+              type: string
+              example: Successfully registered a user!
+            data:
+              type: object
+              properties:
+                name:
+                  description: New user name
+                  type: string
+                  example: Robert Pattison
+                email:
+                  description: New user email
+                  type: string
+                  example: email@me.com
+                _id:
+                  description: New user id (auto-generated)
+                  type: string
+                  example: 666ed33db5653b741ac1b547
+                createdAt:
+                  description: Timestamp (auto-generated)
+                  type: string
+                  example: '2024-06-16T11:57:49.764Z'
+                updatedAt:
+                  description: Timestamp (auto-generated)
+                  type: string
+                  example: '2024-06-16T11:57:49.764Z'
+  '400':
+    $ref: ../../../components/responses/400.yaml
+  '409':
+    description: Email is already in use
+    content:
+      application/json:
+        schema:
+          properties:
+            status:
+              type: integer
+              example: 409
+            message:
+              type: string
+              example: ConflictError
+            data:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: Email is already in use

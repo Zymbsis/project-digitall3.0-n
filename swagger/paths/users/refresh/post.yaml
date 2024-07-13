@@ -1,0 +1,51 @@
+tags:
+  - Users
+summary: Resfresh user session
+operationId: refreshUserSession
+description: Resfresh user session
+security: []
+parameters:
+  - name: refreshToken
+    in: cookie
+    required: true
+    schema:
+      description: Refresh token
+      type: string
+responses:
+  '200':
+    description: Successfully refreshed a session!
+    content:
+      application/json:
+        schema:
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully refreshed a session!
+            data:
+              type: object
+              properties:
+                accessToken:
+                  type: string
+                  example: +ktMRdCpqUs482YQY57TK6Z5ME8u75fZYQYFfNks
+  '401':
+    description: Session token expired
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 401
+            message:
+              type: string
+              example: Session token expired
+            data:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: 'Session token expired'

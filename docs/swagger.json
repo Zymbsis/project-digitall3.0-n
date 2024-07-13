@@ -16,11 +16,314 @@
   ],
   "tags": [
     {
+      "name": "Users",
+      "description": "Operations with user."
+    },
+    {
       "name": "Water",
       "description": "Operations with water portions."
     }
   ],
   "paths": {
+    "/users/register": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Register a new user",
+        "operationId": "registerUser",
+        "description": "Register a new user",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "email": {
+                    "description": "User's email",
+                    "type": "string",
+                    "example": "bob@me.com"
+                  },
+                  "password": {
+                    "description": "Password",
+                    "type": "string",
+                    "example": "immortal"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully registered a user!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 201
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully registered a user!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "description": "New user name",
+                          "type": "string",
+                          "example": "Robert Pattison"
+                        },
+                        "email": {
+                          "description": "New user email",
+                          "type": "string",
+                          "example": "email@me.com"
+                        },
+                        "_id": {
+                          "description": "New user id (auto-generated)",
+                          "type": "string",
+                          "example": "666ed33db5653b741ac1b547"
+                        },
+                        "createdAt": {
+                          "description": "Timestamp (auto-generated)",
+                          "type": "string",
+                          "example": "2024-06-16T11:57:49.764Z"
+                        },
+                        "updatedAt": {
+                          "description": "Timestamp (auto-generated)",
+                          "type": "string",
+                          "example": "2024-06-16T11:57:49.764Z"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "409": {
+            "description": "Email is already in use",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 409
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "ConflictError"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Email is already in use"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Login user",
+        "operationId": "loginUser",
+        "description": "Login user",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "email": {
+                    "description": "User's email",
+                    "type": "string",
+                    "example": "alcrane@outlook.com"
+                  },
+                  "password": {
+                    "description": "Password",
+                    "type": "string",
+                    "example": "karp"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully logged in an user!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully logged in an user!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "accessToken": {
+                          "type": "string",
+                          "example": "EyShUQ68S0AK8fL0+6g/HuLYPTZ+so1KUHyRZCwk"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          }
+        }
+      }
+    },
+    "/users/refresh": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Resfresh user session",
+        "operationId": "refreshUserSession",
+        "description": "Resfresh user session",
+        "security": [],
+        "parameters": [
+          {
+            "name": "refreshToken",
+            "in": "cookie",
+            "required": true,
+            "schema": {
+              "description": "Refresh token",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully refreshed a session!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully refreshed a session!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "accessToken": {
+                          "type": "string",
+                          "example": "+ktMRdCpqUs482YQY57TK6Z5ME8u75fZYQYFfNks"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session token expired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Session token expired"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Session token expired"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/logout": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Logout user",
+        "operationId": "logoutUser",
+        "description": "Logout user",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content - User was successfully logged out"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          }
+        }
+      }
+    },
     "/water": {
       "get": {
         "tags": [
@@ -95,12 +398,12 @@
                   "time": {
                     "description": "The time of water consumption defined by user in ISO format.",
                     "type": "string",
-                    "example": "12:47:05.010Z"
+                    "example": "09:00:05.000Z"
                   },
                   "date": {
                     "description": "The date of water consumption defined by user in ISO format.",
                     "type": "string",
-                    "example": "2025-03-01"
+                    "example": "2024-07-01"
                   },
                   "volume": {
                     "description": "The volume of water defined and consumed by user in milliliters.",
@@ -211,7 +514,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "example": "65ca67e7ae7f10c88b598384"
+              "example": "6692b285f4254143d9507fe9"
             }
           }
         ],
@@ -224,12 +527,7 @@
                   "time": {
                     "description": "The time of water consumption defined by user in ISO format.",
                     "type": "string",
-                    "example": "12:47:05.010Z"
-                  },
-                  "date": {
-                    "description": "The date of water consumption defined by user in ISO format.",
-                    "type": "string",
-                    "example": "2025-03-01"
+                    "example": "10:30:00.999Z"
                   },
                   "volume": {
                     "description": "The volume of water defined and consumed by user in milliliters.",
@@ -298,7 +596,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "example": "65ca67e7ae7f10c88b598384"
+              "example": "6692b285f4254143d9507fe9"
             }
           }
         ],
@@ -338,7 +636,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "example": "2024-03-03"
+              "example": "2024-07-01"
             }
           }
         ],
@@ -374,7 +672,7 @@
                         "date": {
                           "description": "Requested day in ISO format",
                           "type": "string",
-                          "example": "2024-03-03"
+                          "example": "2024-07-01"
                         },
                         "portions": {
                           "type": "array",
@@ -423,7 +721,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "example": "2024-03"
+              "example": "2024-07"
             }
           }
         ],
@@ -508,55 +806,31 @@
         "scheme": "bearer"
       }
     },
-    "schemas": {
-      "water": {
-        "title": "Water schema",
-        "type": "object",
-        "required": [
-          "time",
-          "date",
-          "volume"
-        ],
-        "properties": {
-          "_id": {
-            "description": "Water portion's id assigned by MongoDB.",
-            "type": "string",
-            "example": "65e4decdd286b30065d54af9"
-          },
-          "time": {
-            "description": "The time of water consumption defined by user in ISO format.",
-            "type": "string",
-            "example": "12:47:05.010Z"
-          },
-          "date": {
-            "description": "The date of water consumption defined by user in ISO format.",
-            "type": "string",
-            "example": "2025-03-01"
-          },
-          "volume": {
-            "description": "The volume of water defined and consumed by user in milliliters.",
-            "type": "number",
-            "example": 150
-          },
-          "userId": {
-            "description": "Owner's ID attributed via authentication.",
-            "type": "string",
-            "example": "65e4decdd286b30065d54af1"
-          },
-          "createdAt": {
-            "description": "Water portion's creation date assigned by MongoDB.",
-            "type": "string",
-            "example": "2024-07-01T18:49:47.392Z"
-          },
-          "updatedAt": {
-            "description": "Last time water portion was updated assigned by MongoDB.",
-            "type": "string",
-            "example": "2024-07-01T18:49:47.392Z"
+    "responses": {
+      "400": {
+        "description": "Bad request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 400
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Something went wrong"
+                },
+                "error": {
+                  "type": "string",
+                  "example": "Bad request"
+                }
+              }
+            }
           }
         }
-      }
-    },
-    "responses": {
+      },
       "401": {
         "description": "Unauthorized error",
         "content": {
@@ -628,6 +902,54 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "water": {
+        "title": "Water schema",
+        "type": "object",
+        "required": [
+          "time",
+          "date",
+          "volume"
+        ],
+        "properties": {
+          "_id": {
+            "description": "Water portion's id assigned by MongoDB.",
+            "type": "string",
+            "example": "65e4decdd286b30065d54af9"
+          },
+          "time": {
+            "description": "The time of water consumption defined by user in ISO format.",
+            "type": "string",
+            "example": "12:47:05.010Z"
+          },
+          "date": {
+            "description": "The date of water consumption defined by user in ISO format.",
+            "type": "string",
+            "example": "2025-03-01"
+          },
+          "volume": {
+            "description": "The volume of water defined and consumed by user in milliliters.",
+            "type": "number",
+            "example": 150
+          },
+          "userId": {
+            "description": "Owner's ID attributed via authentication.",
+            "type": "string",
+            "example": "65e4decdd286b30065d54af1"
+          },
+          "createdAt": {
+            "description": "Water portion's creation date assigned by MongoDB.",
+            "type": "string",
+            "example": "2024-07-01T18:49:47.392Z"
+          },
+          "updatedAt": {
+            "description": "Last time water portion was updated assigned by MongoDB.",
+            "type": "string",
+            "example": "2024-07-01T18:49:47.392Z"
           }
         }
       }
