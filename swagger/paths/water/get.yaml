@@ -1,0 +1,30 @@
+tags:
+  - Water
+summary: Gets a list of all water portions consummed by current User.
+operationId: getAllPortionsController
+description: Gets list of water portions
+security:
+  - bearerAuth: []
+responses:
+  '200':
+    description: Request completed with success.
+    content:
+      application/json:
+        schema:
+          type: object
+          required: [status, message, data]
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully found all water portions.
+            data:
+              type: array
+              items:
+                $ref: ../../components/schemas/water.yaml
+  '401':
+    $ref: '../../components/responses/401.yaml'
+  '500':
+    description: Server error

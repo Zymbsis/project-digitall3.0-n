@@ -1,0 +1,57 @@
+tags:
+  - Water
+summary: Patch water portion by id
+operationId: patchPortionController
+description: Patch water portion by id
+security:
+  - bearerAuth: []
+parameters:
+  - in: path
+    name: id
+    required: true
+    schema:
+      type: string
+      example: 65ca67e7ae7f10c88b598384
+requestBody:
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          time:
+            description: 'The time of water consumption defined by user in ISO format.'
+            type: string
+            example: '12:47:05.010Z'
+          date:
+            description: 'The date of water consumption defined by user in ISO format.'
+            type: string
+            example: '2025-03-01'
+          volume:
+            description: 'The volume of water defined and consumed by user in milliliters.'
+            type: number
+            example: 150
+responses:
+  '200':
+    description: Successfully updated water portion by id
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully updated water portion
+            data:
+              type: object
+              $ref: ../../../components/schemas/water.yaml
+  '401':
+    $ref: ../../../components/responses/401.yaml
+  '500':
+    description: Server error

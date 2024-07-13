@@ -89,13 +89,17 @@ export const getPortionsByMonth = async (date) => {
     { $sort: { _id: 1 } },
     {
       $project: {
-        _id: '$day',
-        date: '$_id',
+        _id: 0,
+        day: '$day',
         portions: 1,
         completionRate: 1,
       },
     },
   ]);
 
-  return result;
+  if (!result.length) {
+    return { date, days: [] };
+  }
+
+  return { date, days: result };
 };

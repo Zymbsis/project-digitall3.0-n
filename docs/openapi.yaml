@@ -1,0 +1,36 @@
+openapi: 3.1.0
+info:
+  version: 1.0.0
+  title: AquaTracker app
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  description: |
+    This is a documentation of AquaTracker app
+tags:
+  - name: Water
+    description: Operations with water portions.
+servers:
+  - url: https://aquatracker-node.onrender.com
+paths:
+  /water:
+    get:
+      $ref: ../swagger/paths/water/get.yaml
+    post:
+      $ref: ../swagger/paths/water/post.yaml
+  /water/{id}:
+    patch:
+      $ref: ../swagger/paths/water/{id}/patch.yaml
+    delete:
+      $ref: ../swagger/paths/water/{id}/delete.yaml
+  /water/day/{date}:
+    get:
+      $ref: ../swagger/paths/water/day/{date}/get.yaml
+  /water/month/{date}:
+    get:
+      $ref: ../swagger/paths/water/month/{date}/get.yaml
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer

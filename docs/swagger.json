@@ -1,0 +1,636 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "AquaTracker app",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "description": "This is a documentation of AquaTracker app\n"
+  },
+  "servers": [
+    {
+      "url": "https://aquatracker-node.onrender.com"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Water",
+      "description": "Operations with water portions."
+    }
+  ],
+  "paths": {
+    "/water": {
+      "get": {
+        "tags": [
+          "Water"
+        ],
+        "summary": "Gets a list of all water portions consummed by current User.",
+        "operationId": "getAllPortionsController",
+        "description": "Gets list of water portions",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request completed with success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully found all water portions."
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/water"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Water"
+        ],
+        "summary": "Adds new water portion",
+        "operationId": "addPortionController",
+        "description": "Adds new water portion",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "time": {
+                    "description": "The time of water consumption defined by user in ISO format.",
+                    "type": "string",
+                    "example": "12:47:05.010Z"
+                  },
+                  "date": {
+                    "description": "The date of water consumption defined by user in ISO format.",
+                    "type": "string",
+                    "example": "2025-03-01"
+                  },
+                  "volume": {
+                    "description": "The volume of water defined and consumed by user in milliliters.",
+                    "type": "number",
+                    "example": 150
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Water portion added with success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 201
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully added water portion"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/water"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Bad request"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Bad request"
+                        },
+                        "errors": {
+                          "type": "array",
+                          "items": {
+                            "type": "object"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/water/{id}": {
+      "patch": {
+        "tags": [
+          "Water"
+        ],
+        "summary": "Patch water portion by id",
+        "operationId": "patchPortionController",
+        "description": "Patch water portion by id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "65ca67e7ae7f10c88b598384"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "time": {
+                    "description": "The time of water consumption defined by user in ISO format.",
+                    "type": "string",
+                    "example": "12:47:05.010Z"
+                  },
+                  "date": {
+                    "description": "The date of water consumption defined by user in ISO format.",
+                    "type": "string",
+                    "example": "2025-03-01"
+                  },
+                  "volume": {
+                    "description": "The volume of water defined and consumed by user in milliliters.",
+                    "type": "number",
+                    "example": 150
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully updated water portion by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully updated water portion"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/water"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Water"
+        ],
+        "summary": "Delete water portion by id",
+        "operationId": "deletePortionController",
+        "description": "Delete water portion by id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "65ca67e7ae7f10c88b598384"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/water/day/{date}": {
+      "get": {
+        "tags": [
+          "Water"
+        ],
+        "summary": "Gets water portions consumed on specified day.",
+        "operationId": "getPortionsByDayController",
+        "description": "Gets water portions by day.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "date",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "2024-03-03"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully water portions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully found water portions for selected date."
+                    },
+                    "data": {
+                      "type": "object",
+                      "required": [
+                        "date",
+                        "portions",
+                        "completionRate"
+                      ],
+                      "properties": {
+                        "date": {
+                          "description": "Requested day in ISO format",
+                          "type": "string",
+                          "example": "2024-03-03"
+                        },
+                        "portions": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "$ref": "#/components/schemas/water"
+                          }
+                        },
+                        "completionRate": {
+                          "type": "number",
+                          "example": 0.65
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      }
+    },
+    "/water/month/{date}": {
+      "get": {
+        "tags": [
+          "Water"
+        ],
+        "summary": "Gets water portions consumed on specified month.",
+        "operationId": "getPortionsByMonthController",
+        "description": "Gets water portions by month.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "date",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "2024-03"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully found water portions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully found water portions for selected date."
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "date": {
+                          "description": "Requested month in ISO format",
+                          "type": "string",
+                          "example": "2024-03"
+                        },
+                        "days": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "required": [
+                              "date",
+                              "portions",
+                              "completionRate"
+                            ],
+                            "properties": {
+                              "day": {
+                                "type": "string",
+                                "example": "06"
+                              },
+                              "portions": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "$ref": "#/components/schemas/water"
+                                }
+                              },
+                              "completionRate": {
+                                "type": "number",
+                                "example": 0.65
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "schemas": {
+      "water": {
+        "title": "Water schema",
+        "type": "object",
+        "required": [
+          "time",
+          "date",
+          "volume"
+        ],
+        "properties": {
+          "_id": {
+            "description": "Water portion's id assigned by MongoDB.",
+            "type": "string",
+            "example": "65e4decdd286b30065d54af9"
+          },
+          "time": {
+            "description": "The time of water consumption defined by user in ISO format.",
+            "type": "string",
+            "example": "12:47:05.010Z"
+          },
+          "date": {
+            "description": "The date of water consumption defined by user in ISO format.",
+            "type": "string",
+            "example": "2025-03-01"
+          },
+          "volume": {
+            "description": "The volume of water defined and consumed by user in milliliters.",
+            "type": "number",
+            "example": 150
+          },
+          "userId": {
+            "description": "Owner's ID attributed via authentication.",
+            "type": "string",
+            "example": "65e4decdd286b30065d54af1"
+          },
+          "createdAt": {
+            "description": "Water portion's creation date assigned by MongoDB.",
+            "type": "string",
+            "example": "2024-07-01T18:49:47.392Z"
+          },
+          "updatedAt": {
+            "description": "Last time water portion was updated assigned by MongoDB.",
+            "type": "string",
+            "example": "2024-07-01T18:49:47.392Z"
+          }
+        }
+      }
+    },
+    "responses": {
+      "401": {
+        "description": "Unauthorized error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 401
+                },
+                "message": {
+                  "type": "string",
+                  "example": "UnauthorizedError"
+                },
+                "data": {
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Access token expired"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not found error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 404
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Water portion not found."
+                },
+                "data": {
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Water portion not found."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
