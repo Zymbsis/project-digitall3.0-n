@@ -22,10 +22,6 @@ requestBody:
             description: 'The time of water consumption defined by user in ISO format.'
             type: string
             example: '10:30:00.999Z'
-          date:
-            description: 'The date of water consumption defined by user in ISO format.'
-            type: string
-            example: '2024-07-02'
           volume:
             description: 'The volume of water defined and consumed by user in milliliters.'
             type: number
