@@ -11,7 +11,7 @@ parameters:
     required: true
     schema:
       type: string
-      example: '2024-03-03'
+      example: '2024-07-01'
 responses:
   '200':
     description: Successfully water portions.
@@ -34,7 +34,7 @@ responses:
                 date:
                   description: Requested day in ISO format
                   type: string
-                  example: '2024-03-03'
+                  example: '2024-07-01'
                 portions:
                   type: array
                   items:

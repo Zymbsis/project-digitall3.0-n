@@ -11,7 +11,7 @@ parameters:
     required: true
     schema:
       type: string
-      example: 65ca67e7ae7f10c88b598384
+      example: 6692b285f4254143d9507fe9
 requestBody:
   content:
     application/json:
@@ -21,11 +21,11 @@ requestBody:
           time:
             description: 'The time of water consumption defined by user in ISO format.'
             type: string
-            example: '12:47:05.010Z'
+            example: '10:30:00.999Z'
           date:
             description: 'The date of water consumption defined by user in ISO format.'
             type: string
-            example: '2025-03-01'
+            example: '2024-07-02'
           volume:
             description: 'The volume of water defined and consumed by user in milliliters.'
             type: number
