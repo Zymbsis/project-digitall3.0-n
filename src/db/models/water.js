@@ -6,7 +6,7 @@ const waterSchema = new Schema(
     time: { type: String, required: true },
     date: { type: String, required: true },
     volume: { type: Number, required: true },
-    dailyNorma: { type: Number, default: 1800 },
+    dailyNorma: { type: Number, required: true },
   },
   { timestamps: true, versionKey: false },
 );

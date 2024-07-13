@@ -1,3 +1,4 @@
+import createHttpError from 'http-errors';
 import {
   getAllPortions,
   addPortion,
@@ -36,30 +37,42 @@ export const addPortionController = async (req, res) => {
 
   res.status(201).json({
     status: 201,
-    message: 'Successfully added water portion',
+    message: 'Successfully added new water portion',
     data: result,
   });
 };
 
-export const patchPortionController = async (req, res) => {
+export const patchPortionController = async (req, res, next) => {
   const {
     body,
     params: { id: portionId },
     user: { _id: userId },
   } = req;
 
-  const result = await patchPortion(portionId, userId, body);
+  const portion = await patchPortion(portionId, userId, body);
 
-  res.json(result);
+  if (!portion) {
+    return next(createHttpError(404, 'Selected water portion not found'));
+  }
+
+  res.json({
+    status: 200,
+    message: 'Successfully updated selected water portion',
+    data: portion,
+  });
 };
 
-export const deletePortionController = async (req, res) => {
+export const deletePortionController = async (req, res, next) => {
   const {
     params: { id: portionId },
     user: { _id: userId },
   } = req;
 
-  await deletePortion(portionId, userId);
+  const portion = await deletePortion(portionId, userId);
+
+  if (!portion) {
+    return next(createHttpError(404, 'Selected water portion not found'));
+  }
 
   res.status(204).send();
 };
@@ -71,7 +84,13 @@ export const getPortionsByDayController = async (req, res) => {
 
   const result = await getPortionsByDay(date);
 
-  res.json(result);
+  res.json({
+    status: 200,
+    message: result.portions.length
+      ? 'Successfully found water portions for selected date'
+      : 'No water portions found for selected date',
+    data: result,
+  });
 };
 
 export const getPortionsByMonthController = async (req, res) => {
@@ -81,5 +100,11 @@ export const getPortionsByMonthController = async (req, res) => {
 
   const result = await getPortionsByMonth(date);
 
-  res.json(result);
+  res.json({
+    status: 200,
+    message: result.length
+      ? 'Successfully found history for selected month'
+      : 'No history found for selected month',
+    data: result,
+  });
 };
