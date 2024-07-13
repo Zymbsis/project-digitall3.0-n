@@ -19,23 +19,17 @@ import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 
 export const registerUser = async (payload) => {
   const { email, password } = payload;
-
   const existingUser = await UsersCollection.findOne({ email });
   if (existingUser) {
     throw createHttpError(409, 'Email in use');
   }
-
   const encryptedPassword = await bcrypt.hash(password, 10);
-
   const newUser = await UsersCollection.create({
     ...payload,
     password: encryptedPassword,
   });
 
-  const userObject = newUser.toObject();
-  delete userObject.password;
-
-  return userObject;
+  return newUser;
 };
 
 export const loginUser = async (payload) => {

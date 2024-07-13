@@ -1,15 +1,15 @@
-import { registerUser } from '../services/auth.js';
-import { loginUser } from '../services/auth.js';
+import { registerUser } from '../services/users.js';
+import { loginUser } from '../services/users.js';
 import { THIRTY_DAYS, FIFTEEN_MINUTES } from '../constants/index.js';
-import { logoutUser } from '../services/auth.js';
-import { refreshUsersSession } from '../services/auth.js';
+import { logoutUser } from '../services/users.js';
+import { refreshUsersSession } from '../services/users.js';
 // import { requestResetToken } from '../services/auth.js';
 // import { resetPassword } from '../services/auth.js';
 
 export const registerUserController = async (req, res) => {
   const user = await registerUser(req.body);
 
-  res.json(201, {
+  res.status(201).json({
     status: 201,
     message: 'Successfully registered a user!',
     data: user,
