@@ -17,26 +17,34 @@ import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 const waterRouter = Router();
 
 waterRouter.use(authenticate);
-waterRouter.use('/:id', validateId('id'));
 
 waterRouter.get('/', ctrlWrapper(getAllPortionsController));
+
 waterRouter.post(
   '/',
   validateBody(addPortionSchema),
   ctrlWrapper(addPortionController),
 );
+
 waterRouter.patch(
   '/:id',
+  validateId('id'),
   validateBody(patchPortionSchema),
   ctrlWrapper(patchPortionController),
 );
-waterRouter.delete('/:id', ctrlWrapper(deletePortionController));
+
+waterRouter.delete(
+  '/:id',
+  validateId('id'),
+  ctrlWrapper(deletePortionController),
+);
 
 waterRouter.get(
   '/day/:date',
   validateDate('date'),
   ctrlWrapper(getPortionsByDayController),
 );
+
 waterRouter.get(
   '/month/:date',
   validateDate('date'),
