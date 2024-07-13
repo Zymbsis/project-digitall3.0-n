@@ -71,6 +71,15 @@ export const refreshUserSession = async (sessionId, refreshToken) => {
   return newSession;
 };
 
+//GET_CURRENT_USER//
+export const getCurrentUser = async (userId) => {
+  const user = await UsersCollection.findById(userId).select('-password');
+  if (!user) {
+    throw createHttpError(404, 'User not found');
+  }
+  return user;
+};
+
 // export const requestResetToken = ctrlWrapper(async (email) => {
 //   const user = await UsersCollection.findOne({ email });
 //   if (!user) {
