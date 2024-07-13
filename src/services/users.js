@@ -149,3 +149,5 @@ export const refreshUserSession = async (sessionId, refreshToken) => {
 //     { password: encryptedPassword },
 //   );
 // };
+
+export const getCount = async () => await UsersCollection.countDocuments();

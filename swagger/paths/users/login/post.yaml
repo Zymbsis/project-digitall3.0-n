@@ -6,6 +6,7 @@ description: Login user
 security:
   - bearerAuth: []
 requestBody:
+  required: true
   content:
     application/json:
       schema:
@@ -43,3 +44,5 @@ responses:
                   example: EyShUQ68S0AK8fL0+6g/HuLYPTZ+so1KUHyRZCwk
   '400':
     $ref: ../../../components/responses/400.yaml
+  '401':
+    $ref: '../../../components/responses/401.yaml'

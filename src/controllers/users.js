@@ -3,6 +3,7 @@ import {
   loginUser,
   logoutUser,
   refreshUserSession,
+  getCount,
 } from '../services/users.js';
 import { setupSession } from '../utils/setupSession.js';
 
@@ -51,6 +52,15 @@ export const refreshUserSessionController = async (req, res) => {
     data: {
       accessToken: session.accessToken,
     },
+  });
+};
+
+export const getCountController = async (req, res) => {
+  const count = await getCount();
+  res.json({
+    status: 200,
+    message: 'Successfully counted all registered users.',
+    data: { count },
   });
 };
 
