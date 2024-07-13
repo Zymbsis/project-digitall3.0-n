@@ -1,7 +1,10 @@
 import { Router } from 'express';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { registerUserSchema } from '../validation/users.js';
-import { registerUserController } from '../controllers/users.js';
+import {
+  getCountController,
+  registerUserController,
+} from '../controllers/users.js';
 import { validateBody } from '../middlewares/validateBody.js';
 import { loginUserSchema } from '../validation/users.js';
 import { loginUserController } from '../controllers/users.js';
@@ -34,6 +37,8 @@ router.post(
   authenticate,
   ctrlWrapper(refreshUserSessionController),
 );
+
+router.get('/count', getCountController);
 
 // router.post(
 //   '/send-reset-email',

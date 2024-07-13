@@ -27,6 +27,9 @@ paths:
   /users/logout:
     post:
       $ref: ../swagger/paths/users/logout/post.yaml
+  /users/count:
+    post:
+      $ref: ../swagger/paths/users/count/get.yaml
   /water:
     get:
       $ref: ../swagger/paths/water/get.yaml
