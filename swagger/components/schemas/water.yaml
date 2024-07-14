@@ -3,30 +3,30 @@ type: object
 required: [time, date, volume]
 properties:
   _id:
-    description: "Water portion's id assigned by MongoDB."
+    description: Water intake id assigned by MongoDB.
     type: string
     example: 65e4decdd286b30065d54af9
   time:
-    description: 'The time of water consumption defined by user in ISO format.'
+    description: The time of water consumption defined by user in ISO format.
     type: string
-    example: '12:47:05.010Z'
+    example: 12:30:00
   date:
-    description: 'The date of water consumption defined by user in ISO format.'
+    description: The date of water consumption defined by user in ISO format.
     type: string
-    example: '2025-03-01'
+    example: 2025-03-01
   volume:
-    description: 'The volume of water defined and consumed by user in milliliters.'
+    description: The volume of water defined and consumed by user in milliliters.
     type: number
     example: 150
   userId:
-    description: "Owner's ID attributed via authentication."
+    description: 'Owners ID attributed via authentication.'
     type: string
     example: 65e4decdd286b30065d54af1
   createdAt:
-    description: "Water portion's creation date assigned by MongoDB."
+    description: Water intake creation date assigned by MongoDB.
     type: string
-    example: '2024-07-01T18:49:47.392Z'
+    example: 2024-07-01T18:49:47.392Z
   updatedAt:
-    description: 'Last time water portion was updated assigned by MongoDB.'
+    description: Last time water intake was updated assigned by MongoDB.
     type: string
-    example: '2024-07-01T18:49:47.392Z'
+    example: 2024-07-01T18:49:47.392Z

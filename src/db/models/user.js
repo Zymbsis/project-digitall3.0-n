@@ -9,7 +9,7 @@ const usersSchema = new Schema(
     dailyNorma: { type: Number, min: 0, max: 10000, default: 1500 },
     weight: { type: Number, min: 0, default: 0 },
     activeHours: { type: Number, min: 0, max: 12, default: 0 },
-    avatar: { type: String, default: 'Here should be a placeholder image' },
+    avatar: { type: String, default: '' },
   },
   { timestamps: true, versionKey: false },
 );

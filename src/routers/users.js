@@ -5,7 +5,7 @@ import {
   getCurrentUserController,
   registerUserController,
   updateUserController,
-  getCountController,
+  getUsersCountController,
 } from '../controllers/users.js';
 import { validateBody } from '../middlewares/validateBody.js';
 import { loginUserSchema } from '../validation/users.js';
@@ -49,7 +49,7 @@ router.patch(
   ctrlWrapper(updateUserController),
 );
 
-router.get('/count', getCountController);
+router.get('/count', getUsersCountController);
 
 // router.post(
 //   '/send-reset-email',

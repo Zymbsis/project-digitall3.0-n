@@ -5,7 +5,7 @@ import {
   refreshUserSession,
   getCurrentUser,
   updateUser,
-  getCount,
+  getUsersCount,
 } from '../services/users.js';
 import { setupSession } from '../utils/setupSession.js';
 
@@ -75,8 +75,8 @@ export const updateUserController = async (req, res) => {
   });
 };
 
-export const getCountController = async (req, res) => {
-  const count = await getCount();
+export const getUsersCountController = async (req, res) => {
+  const count = await getUsersCount();
   res.json({
     status: 200,
     message: 'Successfully counted all registered users.',

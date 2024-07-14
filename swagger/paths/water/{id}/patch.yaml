@@ -1,8 +1,8 @@
 tags:
   - Water
-summary: Patch water portion by id
-operationId: patchPortionController
-description: Patch water portion by id
+summary: Patches water intake by id
+operationId: patchWaterIntakeController
+description: Patch water intake by id
 security:
   - bearerAuth: []
 parameters:
@@ -19,15 +19,15 @@ requestBody:
         type: object
         properties:
           time:
-            description: 'The time of water consumption defined by user in ISO format.'
+            description: The time of water consumption defined by user in ISO format.
             type: string
-            example: '10:30:00.999Z'
+            example: 10:30:00.999Z
           volume:
-            description: 'The volume of water defined and consumed by user in milliliters.'
+            description: The volume of water defined and consumed by user in milliliters.
             type: number
             example: 150
 responses:
-  '200':
+  200:
     description: Successfully updated water portion by id
     content:
       application/json:
@@ -47,7 +47,7 @@ responses:
             data:
               type: object
               $ref: ../../../components/schemas/water.yaml
-  '401':
+  401:
     $ref: ../../../components/responses/401.yaml
-  '500':
+  500:
     description: Server error

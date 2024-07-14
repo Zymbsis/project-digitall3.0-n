@@ -13,7 +13,7 @@ parameters:
       description: Refresh token
       type: string
 responses:
-  '200':
+  200:
     description: Successfully refreshed a session!
     content:
       application/json:
@@ -31,7 +31,7 @@ responses:
                 accessToken:
                   type: string
                   example: +ktMRdCpqUs482YQY57TK6Z5ME8u75fZYQYFfNks
-  '401':
+  401:
     description: Session token expired
     content:
       application/json:
@@ -49,4 +49,4 @@ responses:
               properties:
                 message:
                   type: string
-                  example: 'Session token expired'
+                  example: Session token expired

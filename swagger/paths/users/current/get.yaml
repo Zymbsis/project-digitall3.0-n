@@ -1,0 +1,32 @@
+tags:
+  - Users
+summary: Gets information about current user.
+operationId: getCurrentUserController
+description: Get info about current user.
+security:
+  - bearerAuth: []
+responses:
+  200:
+    description: Request successfully completed
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully retrieved user information!
+            data:
+              type: object
+              $ref: ../../../components/schemas/user.yaml
+  401:
+    $ref: ../../../components/responses/401.yaml
+  500:
+    description: Server error

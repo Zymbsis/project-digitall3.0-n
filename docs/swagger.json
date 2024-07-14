@@ -21,7 +21,7 @@
     },
     {
       "name": "Water",
-      "description": "Operations with water portions."
+      "description": "Operations related to water consumption."
     }
   ],
   "paths": {
@@ -50,14 +50,14 @@
                 ],
                 "properties": {
                   "email": {
-                    "description": "User's email",
+                    "description": "User email",
                     "type": "string",
                     "example": "bob@me.com"
                   },
                   "password": {
-                    "description": "Password",
+                    "description": "User password",
                     "type": "string",
-                    "example": "immortal"
+                    "example": "password"
                   }
                 }
               }
@@ -90,12 +90,13 @@
                         "name": {
                           "description": "New user name",
                           "type": "string",
+                          "default": "User",
                           "example": "Robert Pattison"
                         },
                         "email": {
                           "description": "New user email",
                           "type": "string",
-                          "example": "email@me.com"
+                          "example": "bob@me.com"
                         },
                         "gender": {
                           "type": "string",
@@ -198,14 +199,14 @@
                 ],
                 "properties": {
                   "email": {
-                    "description": "User's email",
+                    "description": "User email",
                     "type": "string",
-                    "example": "alcrane@outlook.com"
+                    "example": "bob@me.com"
                   },
                   "password": {
-                    "description": "Password",
+                    "description": "User password",
                     "type": "string",
-                    "example": "karp"
+                    "example": "password"
                   }
                 }
               }
@@ -335,6 +336,107 @@
         }
       }
     },
+    "/users/update": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Updates user profile details and preferences.",
+        "operationId": "updateUserController",
+        "description": "Update user account.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "description": "User email",
+                    "type": "string",
+                    "example": "user@email.com"
+                  },
+                  "name": {
+                    "description": "User name",
+                    "type": "string",
+                    "example": "2025-03-01",
+                    "default": "User"
+                  },
+                  "gender": {
+                    "type": "string",
+                    "enum": [
+                      "man",
+                      "woman"
+                    ],
+                    "default": "woman"
+                  },
+                  "dailyNorma": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 10000,
+                    "default": 1500
+                  },
+                  "weight": {
+                    "type": "number",
+                    "default": 0
+                  },
+                  "activeHours": {
+                    "type": "number",
+                    "default": 0
+                  },
+                  "avatar": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request successfully completed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully updated user"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/user"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
     "/users/logout": {
       "post": {
         "tags": [
@@ -358,8 +460,60 @@
         }
       }
     },
+    "/users/current": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Gets information about current user.",
+        "operationId": "getCurrentUserController",
+        "description": "Get info about current user.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request successfully completed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully retrieved user information!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/user"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
     "/users/count": {
-      "post": {
+      "get": {
         "tags": [
           "Users"
         ],
@@ -415,9 +569,9 @@
         "tags": [
           "Water"
         ],
-        "summary": "Gets a list of all water portions consummed by current User.",
-        "operationId": "getAllPortionsController",
-        "description": "Gets list of water portions",
+        "summary": "Gets a list of all water intakes consummed by current User.",
+        "operationId": "getAllWaterIntakesController",
+        "description": "Gets all water intakes by user.",
         "security": [
           {
             "bearerAuth": []
@@ -467,9 +621,9 @@
         "tags": [
           "Water"
         ],
-        "summary": "Adds new water portion",
-        "operationId": "addPortionController",
-        "description": "Adds new water portion",
+        "summary": "Adds new water intake",
+        "operationId": "addWaterIntakeController",
+        "description": "Add new water intake",
         "security": [
           {
             "bearerAuth": []
@@ -484,7 +638,7 @@
                   "time": {
                     "description": "The time of water consumption defined by user in ISO format.",
                     "type": "string",
-                    "example": "09:00:05.000Z"
+                    "example": "09:00:05"
                   },
                   "date": {
                     "description": "The date of water consumption defined by user in ISO format.",
@@ -585,9 +739,9 @@
         "tags": [
           "Water"
         ],
-        "summary": "Patch water portion by id",
-        "operationId": "patchPortionController",
-        "description": "Patch water portion by id",
+        "summary": "Patches water intake by id",
+        "operationId": "patchWaterIntakeController",
+        "description": "Patch water intake by id",
         "security": [
           {
             "bearerAuth": []
@@ -667,9 +821,9 @@
         "tags": [
           "Water"
         ],
-        "summary": "Delete water portion by id",
-        "operationId": "deletePortionController",
-        "description": "Delete water portion by id",
+        "summary": "Deletes water intake by id",
+        "operationId": "deleteWaterIntakeController",
+        "description": "Delete water intake by id",
         "security": [
           {
             "bearerAuth": []
@@ -707,9 +861,9 @@
         "tags": [
           "Water"
         ],
-        "summary": "Gets water portions consumed on specified day.",
-        "operationId": "getPortionsByDayController",
-        "description": "Gets water portions by day.",
+        "summary": "Gets info about water consumption by day.",
+        "operationId": "getInfoByDayController",
+        "description": "Gets water intakes by day.",
         "security": [
           {
             "bearerAuth": []
@@ -792,9 +946,9 @@
         "tags": [
           "Water"
         ],
-        "summary": "Gets water portions consumed on specified month.",
-        "operationId": "getPortionsByMonthController",
-        "description": "Gets water portions by month.",
+        "summary": "Gets info about water consumption by month.",
+        "operationId": "getInfoByMonthController",
+        "description": "Gets water intakes by month.",
         "security": [
           {
             "bearerAuth": []
@@ -852,7 +1006,7 @@
                             "properties": {
                               "day": {
                                 "type": "string",
-                                "example": "06"
+                                "example": 6
                               },
                               "portions": {
                                 "type": "array",
@@ -993,6 +1147,71 @@
       }
     },
     "schemas": {
+      "user": {
+        "title": "User schema",
+        "type": "object",
+        "required": [
+          "email",
+          "password"
+        ],
+        "properties": {
+          "_id": {
+            "description": "User id assigned by MongoDB.",
+            "type": "string",
+            "example": "65e4decdd286b30065d54af9"
+          },
+          "email": {
+            "description": "User email",
+            "type": "string",
+            "example": "user@email.com"
+          },
+          "name": {
+            "description": "User name",
+            "type": "string",
+            "example": "Valeriy Zaluzhnyi",
+            "default": "User"
+          },
+          "password": {
+            "description": "User password"
+          },
+          "gender": {
+            "type": "string",
+            "enum": [
+              "man",
+              "woman"
+            ],
+            "default": "woman"
+          },
+          "dailyNorma": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10000,
+            "default": 1500
+          },
+          "weight": {
+            "type": "number",
+            "default": 0
+          },
+          "activeHours": {
+            "type": "number",
+            "default": 0
+          },
+          "avatar": {
+            "type": "string",
+            "format": "binary"
+          },
+          "createdAt": {
+            "description": "User account creation date assigned by MongoDB.",
+            "type": "string",
+            "example": "2024-07-01T18:49:47.392Z"
+          },
+          "updatedAt": {
+            "description": "Last time user account was updated assigned by MongoDB.",
+            "type": "string",
+            "example": "2024-07-01T18:49:47.392Z"
+          }
+        }
+      },
       "water": {
         "title": "Water schema",
         "type": "object",
@@ -1003,14 +1222,14 @@
         ],
         "properties": {
           "_id": {
-            "description": "Water portion's id assigned by MongoDB.",
+            "description": "Water intake id assigned by MongoDB.",
             "type": "string",
             "example": "65e4decdd286b30065d54af9"
           },
           "time": {
             "description": "The time of water consumption defined by user in ISO format.",
             "type": "string",
-            "example": "12:47:05.010Z"
+            "example": "12:30:00"
           },
           "date": {
             "description": "The date of water consumption defined by user in ISO format.",
@@ -1023,17 +1242,17 @@
             "example": 150
           },
           "userId": {
-            "description": "Owner's ID attributed via authentication.",
+            "description": "Owners ID attributed via authentication.",
             "type": "string",
             "example": "65e4decdd286b30065d54af1"
           },
           "createdAt": {
-            "description": "Water portion's creation date assigned by MongoDB.",
+            "description": "Water intake creation date assigned by MongoDB.",
             "type": "string",
             "example": "2024-07-01T18:49:47.392Z"
           },
           "updatedAt": {
-            "description": "Last time water portion was updated assigned by MongoDB.",
+            "description": "Last time water intake was updated assigned by MongoDB.",
             "type": "string",
             "example": "2024-07-01T18:49:47.392Z"
           }

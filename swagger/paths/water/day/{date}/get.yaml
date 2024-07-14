@@ -1,8 +1,8 @@
 tags:
   - Water
-summary: Gets water portions consumed on specified day.
-operationId: getPortionsByDayController
-description: Gets water portions by day.
+summary: Gets info about water consumption by day.
+operationId: getInfoByDayController
+description: Gets water intakes by day.
 security:
   - bearerAuth: []
 parameters:
@@ -11,9 +11,9 @@ parameters:
     required: true
     schema:
       type: string
-      example: '2024-07-01'
+      example: 2024-07-01
 responses:
-  '200':
+  200:
     description: Successfully water portions.
     content:
       application/json:
@@ -34,7 +34,7 @@ responses:
                 date:
                   description: Requested day in ISO format
                   type: string
-                  example: '2024-07-01'
+                  example: 2024-07-01
                 portions:
                   type: array
                   items:
@@ -43,7 +43,7 @@ responses:
                 completionRate:
                   type: number
                   example: 0.65
-  '401':
+  401:
     $ref: ../../../../components/responses/401.yaml
-  '404':
+  404:
     $ref: ../../../../components/responses/404.yaml

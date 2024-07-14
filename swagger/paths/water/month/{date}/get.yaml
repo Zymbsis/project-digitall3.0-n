@@ -1,8 +1,8 @@
 tags:
   - Water
-summary: Gets water portions consumed on specified month.
-operationId: getPortionsByMonthController
-description: Gets water portions by month.
+summary: Gets info about water consumption by month.
+operationId: getInfoByMonthController
+description: Gets water intakes by month.
 security:
   - bearerAuth: []
 parameters:
@@ -11,9 +11,9 @@ parameters:
     required: true
     schema:
       type: string
-      example: '2024-07'
+      example: 2024-07
 responses:
-  '200':
+  200:
     description: Successfully found water portions.
     content:
       application/json:
@@ -42,7 +42,7 @@ responses:
                     properties:
                       day:
                         type: string
-                        example: '06'
+                        example: 06
                       portions:
                         type: array
                         items:
@@ -51,7 +51,7 @@ responses:
                       completionRate:
                         type: number
                         example: 0.65
-  '401':
+  401:
     $ref: ../../../../components/responses/401.yaml
-  '404':
+  404:
     $ref: ../../../../components/responses/404.yaml

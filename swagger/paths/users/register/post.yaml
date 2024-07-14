@@ -14,15 +14,15 @@ requestBody:
         required: [email, password]
         properties:
           email:
-            description: User's email
+            description: User email
             type: string
             example: bob@me.com
           password:
-            description: Password
+            description: User password
             type: string
-            example: immortal
+            example: password
 responses:
-  '201':
+  201:
     description: Successfully registered a user!
     content:
       application/json:
@@ -44,11 +44,12 @@ responses:
                 name:
                   description: New user name
                   type: string
+                  default: User
                   example: Robert Pattison
                 email:
                   description: New user email
                   type: string
-                  example: email@me.com
+                  example: bob@me.com
                 gender:
                   type: string
                   enum: [man, woman]
@@ -65,18 +66,18 @@ responses:
                 avatar:
                   type: string
                   format: binary
-                  default: 'Here should be a placeholder image'
+                  default: Here should be a placeholder image
                 createdAt:
                   description: Timestamp (auto-generated)
                   type: string
-                  example: '2024-06-16T11:57:49.764Z'
+                  example: 2024-06-16T11:57:49.764Z
                 updatedAt:
                   description: Timestamp (auto-generated)
                   type: string
-                  example: '2024-06-16T11:57:49.764Z'
-  '400':
+                  example: 2024-06-16T11:57:49.764Z
+  400:
     $ref: ../../../components/responses/400.yaml
-  '409':
+  409:
     description: Email is already in use
     content:
       application/json:
