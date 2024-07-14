@@ -173,4 +173,4 @@ export const updateUser = async (_id, payload, options = {}) => {
 //   );
 // };
 
-export const getCount = async () => await UsersCollection.countDocuments();
+export const getUsersCount = async () => await UsersCollection.countDocuments();

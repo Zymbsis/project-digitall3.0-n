@@ -1,0 +1,66 @@
+tags:
+  - Users
+summary: Updates user profile details and preferences.
+operationId: updateUserController
+description: Update user account.
+security:
+  - bearerAuth: []
+requestBody:
+  required: true
+  content:
+    multipart/form-data:
+      schema:
+        type: object
+        properties:
+          email:
+            description: User email
+            type: string
+            example: user@email.com
+          name:
+            description: User name
+            type: string
+            example: 2025-03-01
+            default: User
+          gender:
+            type: string
+            enum: [man, woman]
+            default: woman
+          dailyNorma:
+            type: number
+            minimum: 0
+            maximum: 10000
+            default: 1500
+          weight:
+            type: number
+            default: 0
+          activeHours:
+            type: number
+            default: 0
+          avatar:
+            type: string
+            format: binary
+responses:
+  200:
+    description: Request successfully completed
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully updated user
+            data:
+              type: object
+              $ref: ../../../components/schemas/user.yaml
+  401:
+    $ref: ../../../components/responses/401.yaml
+  500:
+    description: Server error

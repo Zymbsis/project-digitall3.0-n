@@ -1,8 +1,8 @@
 tags:
   - Water
-summary: Delete water portion by id
-operationId: deletePortionController
-description: Delete water portion by id
+summary: Deletes water intake by id
+operationId: deleteWaterIntakeController
+description: Delete water intake by id
 security:
   - bearerAuth: []
 parameters:
@@ -13,11 +13,11 @@ parameters:
       type: string
       example: 6692b285f4254143d9507fe9
 responses:
-  '204':
+  204:
     description: No content
-  '401':
+  401:
     $ref: ../../../components/responses/401.yaml
-  '404':
+  404:
     $ref: ../../../components/responses/404.yaml
-  '500':
+  500:
     description: Server error

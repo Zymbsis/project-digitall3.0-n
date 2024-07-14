@@ -1,0 +1,45 @@
+title: User schema
+type: object
+required: [email, password]
+properties:
+  _id:
+    description: User id assigned by MongoDB.
+    type: string
+    example: 65e4decdd286b30065d54af9
+  email:
+    description: User email
+    type: string
+    example: user@email.com
+  name:
+    description: User name
+    type: string
+    example: Valeriy Zaluzhnyi
+    default: User
+  password:
+    description: User password
+  gender:
+    type: string
+    enum: [man, woman]
+    default: woman
+  dailyNorma:
+    type: number
+    minimum: 0
+    maximum: 10000
+    default: 1500
+  weight:
+    type: number
+    default: 0
+  activeHours:
+    type: number
+    default: 0
+  avatar:
+    type: string
+    format: binary
+  createdAt:
+    description: User account creation date assigned by MongoDB.
+    type: string
+    example: 2024-07-01T18:49:47.392Z
+  updatedAt:
+    description: Last time user account was updated assigned by MongoDB.
+    type: string
+    example: 2024-07-01T18:49:47.392Z

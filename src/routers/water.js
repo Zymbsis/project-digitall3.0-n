@@ -1,54 +1,57 @@
 import { Router } from 'express';
 import {
-  addPortionController,
-  deletePortionController,
-  getAllPortionsController,
-  getPortionsByDayController,
-  getPortionsByMonthController,
-  patchPortionController,
+  addWaterIntakeController,
+  deleteWaterIntakeController,
+  getAllWaterIntakesController,
+  getInfoByDayController,
+  getInfoByMonthController,
+  patchWaterIntakeController,
 } from '../controllers/water.js';
 import { authenticate } from '../middlewares/authenticate.js';
 import { validateId } from '../middlewares/validateId.js';
 import { validateDate } from '../middlewares/validateDate.js';
 import { validateBody } from '../middlewares/validateBody.js';
-import { addPortionSchema, patchPortionSchema } from '../validation/water.js';
+import {
+  addWaterIntakeSchema,
+  patchWaterIntakeSchema,
+} from '../validation/water.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 
 const waterRouter = Router();
 
 waterRouter.use(authenticate);
 
-waterRouter.get('/', ctrlWrapper(getAllPortionsController));
+waterRouter.get('/', ctrlWrapper(getAllWaterIntakesController));
 
 waterRouter.post(
   '/',
-  validateBody(addPortionSchema),
-  ctrlWrapper(addPortionController),
+  validateBody(addWaterIntakeSchema),
+  ctrlWrapper(addWaterIntakeController),
 );
 
 waterRouter.patch(
   '/:id',
   validateId('id'),
-  validateBody(patchPortionSchema),
-  ctrlWrapper(patchPortionController),
+  validateBody(patchWaterIntakeSchema),
+  ctrlWrapper(patchWaterIntakeController),
 );
 
 waterRouter.delete(
   '/:id',
   validateId('id'),
-  ctrlWrapper(deletePortionController),
+  ctrlWrapper(deleteWaterIntakeController),
 );
 
 waterRouter.get(
   '/day/:date',
   validateDate('date'),
-  ctrlWrapper(getPortionsByDayController),
+  ctrlWrapper(getInfoByDayController),
 );
 
 waterRouter.get(
   '/month/:date',
   validateDate('date'),
-  ctrlWrapper(getPortionsByMonthController),
+  ctrlWrapper(getInfoByMonthController),
 );
 
 export default waterRouter;

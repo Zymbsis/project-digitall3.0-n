@@ -1,19 +1,19 @@
 import createHttpError from 'http-errors';
 import {
-  getAllPortions,
-  addPortion,
-  patchPortion,
-  deletePortion,
-  getPortionsByDay,
-  getPortionsByMonth,
+  getAllWaterIntakes,
+  addWaterIntake,
+  patchWaterIntake,
+  deleteWaterIntake,
+  getInfoByDay,
+  getInfoByMonth,
 } from '../services/water.js';
 
-export const getAllPortionsController = async (req, res, next) => {
+export const getAllWaterIntakesController = async (req, res, next) => {
   const {
     user: { _id: userId },
   } = req;
 
-  const result = await getAllPortions(userId);
+  const result = await getAllWaterIntakes(userId);
   res.json({
     status: 200,
     message: result.length
@@ -23,13 +23,13 @@ export const getAllPortionsController = async (req, res, next) => {
   });
 };
 
-export const addPortionController = async (req, res) => {
+export const addWaterIntakeController = async (req, res) => {
   const {
     user: { _id: userId, dailyNorma },
     body,
   } = req;
 
-  const result = await addPortion({
+  const result = await addWaterIntake({
     userId,
     ...body,
     dailyNorma,
@@ -42,14 +42,14 @@ export const addPortionController = async (req, res) => {
   });
 };
 
-export const patchPortionController = async (req, res, next) => {
+export const patchWaterIntakeController = async (req, res, next) => {
   const {
     body,
     params: { id: portionId },
     user: { _id: userId },
   } = req;
 
-  const portion = await patchPortion(portionId, userId, body);
+  const portion = await patchWaterIntake(portionId, userId, body);
 
   if (!portion) {
     return next(createHttpError(404, 'Selected water portion not found'));
@@ -62,31 +62,27 @@ export const patchPortionController = async (req, res, next) => {
   });
 };
 
-export const deletePortionController = async (req, res, next) => {
+export const deleteWaterIntakeController = async (req, res, next) => {
   const {
     params: { id: portionId },
     user: { _id: userId },
   } = req;
 
-  const data = await deletePortion(portionId, userId);
+  const data = await deleteWaterIntake(portionId, userId);
 
   if (!data) {
     return next(createHttpError(404, 'Selected water portion not found'));
   }
 
-  res.json({
-    status: 200,
-    message: 'Successfully deleted a water portion',
-    data,
-  });
+  res.status(204).send();
 };
 
-export const getPortionsByDayController = async (req, res) => {
+export const getInfoByDayController = async (req, res) => {
   const {
     params: { date },
   } = req;
 
-  const data = await getPortionsByDay(date);
+  const data = await getInfoByDay(date);
 
   res.json({
     status: 200,
@@ -97,12 +93,12 @@ export const getPortionsByDayController = async (req, res) => {
   });
 };
 
-export const getPortionsByMonthController = async (req, res) => {
+export const getInfoByMonthController = async (req, res) => {
   const {
     params: { date },
   } = req;
 
-  const data = await getPortionsByMonth(date);
+  const data = await getInfoByMonth(date);
 
   res.json({
     status: 200,

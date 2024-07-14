@@ -16,15 +16,15 @@ requestBody:
           - password
         properties:
           email:
-            description: User's email
+            description: User email
             type: string
-            example: alcrane@outlook.com
+            example: bob@me.com
           password:
-            description: Password
+            description: User password
             type: string
-            example: karp
+            example: password
 responses:
-  '200':
+  200:
     description: Successfully logged in an user!
     content:
       application/json:
@@ -42,7 +42,7 @@ responses:
                 accessToken:
                   type: string
                   example: EyShUQ68S0AK8fL0+6g/HuLYPTZ+so1KUHyRZCwk
-  '400':
+  400:
     $ref: ../../../components/responses/400.yaml
-  '401':
-    $ref: '../../../components/responses/401.yaml'
+  401:
+    $ref: ../../../components/responses/401.yaml

@@ -7,8 +7,8 @@ export const validateDate =
     const date = req.params[`${someDate}`];
     const [period] = req.path.slice(1).split('/');
 
-    const isDay = date.length === 10 && period === 'day';
-    const isMonth = date.length === 7 && period === 'month';
+    const isDay = period === 'day' && date.length === 10;
+    const isMonth = period === 'month' && date.length === 7;
 
     if (!isDay && !isMonth) {
       return next(

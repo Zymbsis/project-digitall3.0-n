@@ -1,16 +1,17 @@
 import { Water } from '../db/models/water.js';
 
-export const getAllPortions = async (userId) => await Water.find({ userId });
+export const getAllWaterIntakes = async (userId) =>
+  await Water.find({ userId });
 
-export const addPortion = async (payload) => await Water.create(payload);
+export const addWaterIntake = async (payload) => await Water.create(payload);
 
-export const patchPortion = async (_id, userId, payload) =>
+export const patchWaterIntake = async (_id, userId, payload) =>
   await Water.findOneAndUpdate({ _id, userId }, payload, { new: true });
 
-export const deletePortion = async (_id, userId) =>
+export const deleteWaterIntake = async (_id, userId) =>
   await Water.findOneAndDelete({ _id, userId });
 
-export const getPortionsByDay = async (date) => {
+export const getInfoByDay = async (date) => {
   const result = await Water.aggregate([
     { $match: { date } },
     { $sort: { time: 1 } },
@@ -52,7 +53,7 @@ export const getPortionsByDay = async (date) => {
   }
 };
 
-export const getPortionsByMonth = async (date) => {
+export const getInfoByMonth = async (date) => {
   const monthQuery = new RegExp(`^${date}`);
 
   const result = await Water.aggregate([
