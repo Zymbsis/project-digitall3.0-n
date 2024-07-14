@@ -3,6 +3,8 @@ import {
   loginUser,
   logoutUser,
   refreshUserSession,
+  getCurrentUser,
+  updateUser,
   getCount,
 } from '../services/users.js';
 import { setupSession } from '../utils/setupSession.js';
@@ -52,6 +54,24 @@ export const refreshUserSessionController = async (req, res) => {
     data: {
       accessToken: session.accessToken,
     },
+  });
+};
+
+export const getCurrentUserController = async (req, res) => {
+  const user = await getCurrentUser(req.user._id);
+  res.json({
+    status: 200,
+    message: 'Successfully retrieved user information!',
+    data: user,
+  });
+};
+
+export const updateUserController = async (req, res) => {
+  const updatedUser = await updateUser(req.user._id, req.body);
+  res.json({
+    status: 200,
+    message: 'User data updated successfully!',
+    data: updatedUser,
   });
 };
 
