@@ -172,3 +172,5 @@ export const updateUser = async (_id, payload, options = {}) => {
 //     { password: encryptedPassword },
 //   );
 // };
+
+export const getCount = async () => await UsersCollection.countDocuments();

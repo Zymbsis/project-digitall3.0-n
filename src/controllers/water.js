@@ -55,7 +55,7 @@ export const patchPortionController = async (req, res, next) => {
     return next(createHttpError(404, 'Selected water portion not found'));
   }
 
-  res.json({
+  res.status(204).send({
     status: 200,
     message: 'Successfully updated selected water portion',
     data: portion,
@@ -68,13 +68,17 @@ export const deletePortionController = async (req, res, next) => {
     user: { _id: userId },
   } = req;
 
-  const portion = await deletePortion(portionId, userId);
+  const data = await deletePortion(portionId, userId);
 
-  if (!portion) {
+  if (!data) {
     return next(createHttpError(404, 'Selected water portion not found'));
   }
 
-  res.status(204).send();
+  res.json({
+    status: 200,
+    message: 'Successfully deleted a water portion',
+    data,
+  });
 };
 
 export const getPortionsByDayController = async (req, res) => {
@@ -82,14 +86,14 @@ export const getPortionsByDayController = async (req, res) => {
     params: { date },
   } = req;
 
-  const result = await getPortionsByDay(date);
+  const data = await getPortionsByDay(date);
 
   res.json({
     status: 200,
-    message: result.portions.length
+    message: data.portions.length
       ? 'Successfully found water portions for selected date'
       : 'No water portions found for selected date',
-    data: result,
+    data,
   });
 };
 
@@ -98,13 +102,13 @@ export const getPortionsByMonthController = async (req, res) => {
     params: { date },
   } = req;
 
-  const result = await getPortionsByMonth(date);
+  const data = await getPortionsByMonth(date);
 
   res.json({
     status: 200,
-    message: result.length
+    message: data.days.length
       ? 'Successfully found history for selected month'
       : 'No history found for selected month',
-    data: result,
+    data,
   });
 };
