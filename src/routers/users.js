@@ -1,9 +1,10 @@
 import { Router } from 'express';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
-import { registerUserSchema } from '../validation/users.js';
+import { registerUserSchema, updateUserSchema } from '../validation/users.js';
 import {
   getCurrentUserController,
   registerUserController,
+  updateUserController,
 } from '../controllers/users.js';
 import { validateBody } from '../middlewares/validateBody.js';
 import { loginUserSchema } from '../validation/users.js';
@@ -39,6 +40,13 @@ router.post(
 );
 
 router.get('/current', authenticate, ctrlWrapper(getCurrentUserController));
+
+router.patch(
+  '/update',
+  authenticate,
+  validateBody(updateUserSchema),
+  ctrlWrapper(updateUserController),
+);
 
 // router.post(
 //   '/send-reset-email',

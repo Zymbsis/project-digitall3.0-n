@@ -80,6 +80,21 @@ export const getCurrentUser = async (userId) => {
   return user;
 };
 
+//UPDATE_USER//
+export const updateUser = async (userId, payload, options = {}) => {
+  const updatedUser = await UsersCollection.findOneAndUpdate(userId, payload, {
+    new: true,
+    runValidators: true,
+    ...options,
+  });
+
+  if (!updatedUser) {
+    throw createHttpError(404, 'User not found');
+  }
+
+  return updatedUser;
+};
+
 // export const requestResetToken = ctrlWrapper(async (email) => {
 //   const user = await UsersCollection.findOne({ email });
 //   if (!user) {
