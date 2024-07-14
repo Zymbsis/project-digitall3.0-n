@@ -81,10 +81,9 @@ export const getCurrentUser = async (userId) => {
 };
 
 //UPDATE_USER//
-export const updateUser = async (userId, payload, options = {}) => {
-  const updatedUser = await UsersCollection.findOneAndUpdate(userId, payload, {
+export const updateUser = async (_id, payload, options = {}) => {
+  const updatedUser = await UsersCollection.findOneAndUpdate({ _id }, payload, {
     new: true,
-    runValidators: true,
     ...options,
   });
 
