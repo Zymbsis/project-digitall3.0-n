@@ -1,0 +1,97 @@
+tags:
+  - Users
+summary: Register a new user
+operationId: registerUser
+description: Register a new user
+security:
+  - bearerAuth: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required: [email, password]
+        properties:
+          email:
+            description: User email
+            type: string
+            example: bob@me.com
+          password:
+            description: User password
+            type: string
+            example: password
+responses:
+  201:
+    description: Successfully registered a user!
+    content:
+      application/json:
+        schema:
+          properties:
+            status:
+              type: integer
+              example: 201
+            message:
+              type: string
+              example: Successfully registered a user!
+            data:
+              type: object
+              properties:
+                _id:
+                  description: New user id (auto-generated)
+                  type: string
+                  example: 666ed33db5653b741ac1b547
+                name:
+                  description: New user name
+                  type: string
+                  default: User
+                  example: Robert Pattison
+                email:
+                  description: New user email
+                  type: string
+                  example: bob@me.com
+                gender:
+                  type: string
+                  enum: [man, woman]
+                  default: woman
+                dailyNorma:
+                  type: number
+                  default: 1500
+                weight:
+                  type: number
+                  default: 0
+                activeHours:
+                  type: number
+                  default: 0
+                avatar:
+                  type: string
+                  format: binary
+                  default: Here should be a placeholder image
+                createdAt:
+                  description: Timestamp (auto-generated)
+                  type: string
+                  example: 2024-06-16T11:57:49.764Z
+                updatedAt:
+                  description: Timestamp (auto-generated)
+                  type: string
+                  example: 2024-06-16T11:57:49.764Z
+  400:
+    $ref: ../../../components/responses/400.yaml
+  409:
+    description: Email is already in use
+    content:
+      application/json:
+        schema:
+          properties:
+            status:
+              type: integer
+              example: 409
+            message:
+              type: string
+              example: ConflictError
+            data:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: Email is already in use

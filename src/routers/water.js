@@ -1,46 +1,57 @@
 import { Router } from 'express';
 import {
-  addPortionController,
-  deletePortionController,
-  getAllPortionsController,
-  getPortionsByDayController,
-  getPortionsByMonthController,
-  patchPortionController,
+  addWaterIntakeController,
+  deleteWaterIntakeController,
+  getAllWaterIntakesController,
+  getInfoByDayController,
+  getInfoByMonthController,
+  patchWaterIntakeController,
 } from '../controllers/water.js';
 import { authenticate } from '../middlewares/authenticate.js';
 import { validateId } from '../middlewares/validateId.js';
 import { validateDate } from '../middlewares/validateDate.js';
 import { validateBody } from '../middlewares/validateBody.js';
-import { addPortionSchema, patchPortionSchema } from '../validation/water.js';
+import {
+  addWaterIntakeSchema,
+  patchWaterIntakeSchema,
+} from '../validation/water.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 
 const waterRouter = Router();
 
 waterRouter.use(authenticate);
-waterRouter.use('/:id', validateId('id'));
 
-waterRouter.get('/', ctrlWrapper(getAllPortionsController));
+waterRouter.get('/', ctrlWrapper(getAllWaterIntakesController));
+
 waterRouter.post(
   '/',
-  validateBody(addPortionSchema),
-  ctrlWrapper(addPortionController),
+  validateBody(addWaterIntakeSchema),
+  ctrlWrapper(addWaterIntakeController),
 );
+
 waterRouter.patch(
   '/:id',
-  validateBody(patchPortionSchema),
-  ctrlWrapper(patchPortionController),
+  validateId('id'),
+  validateBody(patchWaterIntakeSchema),
+  ctrlWrapper(patchWaterIntakeController),
 );
-waterRouter.delete('/:id', ctrlWrapper(deletePortionController));
+
+waterRouter.delete(
+  '/:id',
+  validateId('id'),
+  ctrlWrapper(deleteWaterIntakeController),
+);
 
 waterRouter.get(
   '/day/:date',
   validateDate('date'),
-  ctrlWrapper(getPortionsByDayController),
+  ctrlWrapper(getInfoByDayController),
 );
+
 waterRouter.get(
   '/month/:date',
   validateDate('date'),
-  ctrlWrapper(getPortionsByMonthController),
+  ctrlWrapper(getInfoByMonthController),
 );
 
 export default waterRouter;

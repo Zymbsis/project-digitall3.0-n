@@ -1,0 +1,49 @@
+tags:
+  - Water
+summary: Gets info about water consumption by day.
+operationId: getInfoByDayController
+description: Gets water intakes by day.
+security:
+  - bearerAuth: []
+parameters:
+  - in: path
+    name: date
+    required: true
+    schema:
+      type: string
+      example: 2024-07-01
+responses:
+  200:
+    description: Successfully water portions.
+    content:
+      application/json:
+        schema:
+          type: object
+          required: [status, message, data]
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully found water portions for selected date.
+            data:
+              type: object
+              required: [date, portions, completionRate]
+              properties:
+                date:
+                  description: Requested day in ISO format
+                  type: string
+                  example: 2024-07-01
+                portions:
+                  type: array
+                  items:
+                    type: object
+                    $ref: ../../../../components/schemas/water.yaml
+                completionRate:
+                  type: number
+                  example: 0.65
+  401:
+    $ref: ../../../../components/responses/401.yaml
+  404:
+    $ref: ../../../../components/responses/404.yaml

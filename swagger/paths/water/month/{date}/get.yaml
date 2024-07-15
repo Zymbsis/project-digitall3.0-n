@@ -1,0 +1,57 @@
+tags:
+  - Water
+summary: Gets info about water consumption by month.
+operationId: getInfoByMonthController
+description: Gets water intakes by month.
+security:
+  - bearerAuth: []
+parameters:
+  - in: path
+    name: date
+    required: true
+    schema:
+      type: string
+      example: 2024-07
+responses:
+  200:
+    description: Successfully found water portions.
+    content:
+      application/json:
+        schema:
+          type: object
+          required: [status, message, data]
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully found water portions for selected date.
+            data:
+              type: object
+              properties:
+                date:
+                  description: Requested month in ISO format
+                  type: string
+                  example: 2024-03
+                days:
+                  type: array
+                  items:
+                    type: object
+                    required: [date, portions, completionRate]
+                    properties:
+                      day:
+                        type: string
+                        example: 06
+                      portions:
+                        type: array
+                        items:
+                          type: object
+                          $ref: ../../../../components/schemas/water.yaml
+                      completionRate:
+                        type: number
+                        example: 0.65
+  401:
+    $ref: ../../../../components/responses/401.yaml
+  404:
+    $ref: ../../../../components/responses/404.yaml

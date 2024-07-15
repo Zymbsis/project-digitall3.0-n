@@ -10,6 +10,17 @@ export const loginUserSchema = Joi.object({
   password: Joi.string().required(),
 });
 
+export const updateUserSchema = Joi.object({
+  email: Joi.string().email(),
+  name: Joi.string().min(3).max(50),
+  gender: Joi.string().valid('man', 'woman'),
+  dailyNorma: Joi.number().min(0).max(10000),
+  weight: Joi.number().min(0).max(700),
+  activeHours: Joi.number().min(0).max(12),
+  userId: Joi.string(),
+  avatar: Joi.string(),
+});
+
 // export const requestResetEmailSchema = Joi.object({
 //   email: Joi.string().email().required(),
 // });

@@ -6,10 +6,10 @@ const usersSchema = new Schema(
     password: { type: String, required: true },
     name: { type: String, default: 'User' },
     gender: { type: String, enum: ['man', 'woman'], default: 'woman' },
-    dailyNorma: { type: Number, min: 0, max: 10000, default: 1800 },
+    dailyNorma: { type: Number, min: 0, max: 10000, default: 1500 },
     weight: { type: Number, min: 0, default: 0 },
     activeHours: { type: Number, min: 0, max: 12, default: 0 },
-    avatar: { type: String, default: 'Here should be a placeholder image' },
+    avatar: { type: String, default: '' },
   },
   { timestamps: true, versionKey: false },
 );
@@ -20,4 +20,4 @@ usersSchema.methods.toJSON = function () {
   return obj;
 };
 
-export const UsersCollection = model('users', usersSchema);
+export const UsersCollection = model('user', usersSchema);

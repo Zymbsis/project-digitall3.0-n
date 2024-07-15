@@ -5,11 +5,12 @@ export const validateDate =
   (someDate = 'date') =>
   (req, res, next) => {
     const date = req.params[`${someDate}`];
+    const [period] = req.path.slice(1).split('/');
 
-    const isDay = date.length === 10;
-    const isMonth = date.length === 7;
+    const isDay = period === 'day' && date.length === 10;
+    const isMonth = period === 'month' && date.length === 7;
 
-    if (!isDay || !isMonth) {
+    if (!isDay && !isMonth) {
       return next(
         createHttpError(
           400,

@@ -1,0 +1,71 @@
+tags:
+  - Water
+summary: Adds new water intake
+operationId: addWaterIntakeController
+description: Add new water intake
+security:
+  - bearerAuth: []
+requestBody:
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          time:
+            description: The time of water consumption defined by user in ISO format.
+            type: string
+            example: 09:00:05
+          date:
+            description: The date of water consumption defined by user in ISO format.
+            type: string
+            example: 2024-07-01
+          volume:
+            description: The volume of water defined and consumed by user in milliliters.
+            type: number
+            example: 150
+responses:
+  201:
+    description: Water portion added with success
+    content:
+      application/json:
+        schema:
+          type: object
+          required: [status, message, data]
+          properties:
+            status:
+              type: integer
+              example: 201
+            message:
+              type: string
+              example: Successfully added water portion
+            data:
+              type: object
+              $ref: ../../components/schemas/water.yaml
+  400:
+    description: Bad request
+    content:
+      application/json:
+        schema:
+          type: object
+          required: [status, message, data]
+          properties:
+            status:
+              type: integer
+              example: 400
+            message:
+              type: string
+              example: Bad request
+            data:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: Bad request
+                errors:
+                  type: array
+                  items:
+                    type: object
+  401:
+    $ref: ../../components/responses/401.yaml
+  500:
+    description: Server error
