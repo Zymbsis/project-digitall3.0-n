@@ -13,12 +13,15 @@ import { loginUserController } from '../controllers/users.js';
 import { logoutUserController } from '../controllers/users.js';
 import { refreshUserSessionController } from '../controllers/users.js';
 import { authenticate } from '../middlewares/authenticate.js';
+import cookieParser from 'cookie-parser';
 // import { requestResetEmailSchema } from '../validation/auth.js';
 // import { requestResetEmailController } from '../controllers/auth.js';
 // import { resetPasswordSchema } from '../validation/auth.js';
 // import { resetPasswordController } from '../controllers/auth.js';
 
 const router = Router();
+
+router.use(cookieParser());
 
 router.post(
   '/register',
