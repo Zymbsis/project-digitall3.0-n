@@ -22,7 +22,7 @@ export const startServer = () => {
   );
   app.use(
     cors({
-      origin: '*',
+      origin: 'http://localhost:3001',
       credentials: true,
     }),
   );
