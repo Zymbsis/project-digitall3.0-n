@@ -37,6 +37,7 @@ export const startServer = () => {
     }),
   );
   app.use(cookieParser());
+  app.use(express.json());
 
   // app.use('/uploads', express.static(UPLOAD_DIR));
 
