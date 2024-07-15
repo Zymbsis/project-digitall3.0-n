@@ -54,11 +54,11 @@ export const logoutUser = async (sessionId) => {
 //REFRESH_USER//
 export const refreshUserSession = async ({ sessionId, refreshToken }) => {
   const session = await SessionsCollection.findOne({
-    userId: sessionId,
+    _id: sessionId,
     refreshToken,
   });
   if (!session) {
-    throw createHttpError(401, 'Session not found, refresh');
+    throw createHttpError(401, 'Session not found');
   }
   const isSessionTokenExpired =
     new Date() > new Date(session.refreshTokenValidUntil);
