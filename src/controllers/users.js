@@ -44,8 +44,6 @@ export const logoutUserController = async (req, res) => {
 };
 
 export const refreshUserSessionController = async (req, res) => {
-  console.log(` REQUEST: ${req}`);
-
   const {
     cookies: { sessionId, refreshToken },
   } = req;
