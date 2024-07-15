@@ -22,12 +22,11 @@ export const startServer = () => {
   );
 
   const corsConfig = {
-    origin: 'http://localhost:3000',
+    origin: 'http://localhost:3000/project-digitall3.0-r',
     credentials: true,
   };
 
   app.use(cors(corsConfig));
-  app.options('*', cors(corsConfig));
 
   app.use(
     pino({
