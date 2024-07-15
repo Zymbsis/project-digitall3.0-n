@@ -9,11 +9,4 @@ export const setupSession = (res, session) => {
     httpOnly: true,
     expires: new Date(Date.now() + THIRTY_DAYS),
   });
-  res.json({
-    status: 200,
-    message: 'Successfully refreshed a session!',
-    data: {
-      accessToken: session.accessToken,
-    },
-  });
 };

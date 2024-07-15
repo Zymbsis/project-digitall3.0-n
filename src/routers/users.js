@@ -21,8 +21,6 @@ import cookieParser from 'cookie-parser';
 
 const router = Router();
 
-router.use(cookieParser());
-
 router.post(
   '/register',
   validateBody(registerUserSchema),

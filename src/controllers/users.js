@@ -54,7 +54,14 @@ export const refreshUserSessionController = async (req, res, next) => {
     const session = await refreshUserSession(sessionId, refreshToken);
 
     setupSession(res, session);
-    res.send();
+
+    res.json({
+      status: 200,
+      message: 'Successfully refreshed a session!',
+      data: {
+        accessToken: session.accessToken,
+      },
+    });
   } catch (error) {
     throw new Error(error.message);
   }
