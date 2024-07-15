@@ -27,6 +27,7 @@ export const startServer = () => {
   };
 
   app.use(cors(corsConfig));
+  app.options('*', cors(corsConfig));
 
   app.use(
     pino({
