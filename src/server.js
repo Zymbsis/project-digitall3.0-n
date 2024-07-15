@@ -20,7 +20,12 @@ export const startServer = () => {
       limit: '100kb',
     }),
   );
-  app.use(cors());
+  app.use(
+    cors({
+      origin: '*',
+      credentials: true,
+    }),
+  );
   app.use(
     pino({
       transport: {
