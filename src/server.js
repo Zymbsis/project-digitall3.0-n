@@ -22,7 +22,7 @@ export const startServer = () => {
   );
 
   const corsConfig = {
-    origin: 'http://localhost:3000/',
+    origin: 'http://localhost:3000',
     credentials: true,
   };
 
