@@ -34,7 +34,7 @@ router.post(
 
 router.post('/logout', authenticate, ctrlWrapper(logoutUserController));
 
-router.post(
+router.get(
   '/refresh',
   // authenticate,
   ctrlWrapper(refreshUserSessionController),
