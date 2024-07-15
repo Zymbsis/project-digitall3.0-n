@@ -42,6 +42,7 @@ export const loginUser = async (payload) => {
   }
   await SessionsCollection.deleteOne({ userId: user._id });
   const newSession = await createSession(user._id);
+  console.log('newSession =', newSession);
 
   return newSession;
 };
@@ -52,9 +53,9 @@ export const logoutUser = async (sessionId) => {
 };
 
 //REFRESH_USER//
-export const refreshUserSession = async ({ sessionId, refreshToken }) => {
+export const refreshUserSession = async (_id, refreshToken) => {
   const session = await SessionsCollection.findOne({
-    _id: sessionId,
+    _id,
     refreshToken,
   });
 
@@ -69,7 +70,7 @@ export const refreshUserSession = async ({ sessionId, refreshToken }) => {
     throw createHttpError(401, 'Session token expired');
   }
 
-  await SessionsCollection.deleteOne({ _id: sessionId, refreshToken });
+  await SessionsCollection.deleteOne({ _id, refreshToken });
 
   const newSession = await createSession(session.userId);
 
