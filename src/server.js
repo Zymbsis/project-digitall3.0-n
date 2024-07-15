@@ -14,6 +14,7 @@ const port = Number(env('PORT', 3000));
 
 export const startServer = () => {
   const app = express();
+  app.use(cookieParser());
   app.use(
     express.json({
       type: ['application/json', 'application/vnd.api+json'],
@@ -22,7 +23,7 @@ export const startServer = () => {
   );
   app.use(
     cors({
-      origin: 'http://localhost:3001',
+      origin: '*',
       credentials: true,
     }),
   );
@@ -33,7 +34,6 @@ export const startServer = () => {
       },
     }),
   );
-  app.use(cookieParser());
   // app.use('/uploads', express.static(UPLOAD_DIR));
   app.use('/api-docs', swaggerDocs());
 
