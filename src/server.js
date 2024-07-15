@@ -22,7 +22,6 @@ export const startServer = () => {
   );
 
   const corsConfig = {
-    origin: 'http://localhost:3000/project-digitall3.0-r',
     credentials: true,
   };
 
@@ -36,7 +35,9 @@ export const startServer = () => {
     }),
   );
   app.use(cookieParser());
+
   // app.use('/uploads', express.static(UPLOAD_DIR));
+
   app.use('/api-docs', swaggerDocs());
 
   app.use(router);
