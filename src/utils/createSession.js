@@ -2,12 +2,12 @@ import { randomBytes } from 'crypto';
 import { FIFTEEN_MINUTES, THIRTY_DAYS } from '../constants/index.js';
 import { SessionsCollection } from '../db/models/session.js';
 
-export const createSession = async (userId) => {
+export const createSession = async (id) => {
   const accessToken = randomBytes(30).toString('base64');
   const refreshToken = randomBytes(30).toString('base64');
 
   const newSessionObject = {
-    userId,
+    userId: id,
     accessToken,
     refreshToken,
     accessTokenValidUntil: new Date(Date.now() + FIFTEEN_MINUTES),
