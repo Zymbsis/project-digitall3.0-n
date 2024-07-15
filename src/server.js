@@ -23,7 +23,17 @@ export const startServer = () => {
   );
   app.use(
     cors({
-      origin: '*',
+      origin: (origin, callback) => {
+        if (
+          origin &&
+          (origin === 'http://localhost:3001' ||
+            origin === 'https://aquatracker-node.onrender.com')
+        ) {
+          callback(null, true); // Дозволити запит
+        } else {
+          callback(new Error('Not allowed by CORS')); // Заборонити запит
+        }
+      },
       credentials: true,
     }),
   );
