@@ -27,7 +27,7 @@ export const startServer = () => {
         if (
           origin &&
           (origin === 'http://localhost:3001' ||
-            origin === 'https://aquatracker-node.onrender.com')
+            origin === 'https://zymbsis.github.io/project-digitall3.0-r.com')
         ) {
           callback(null, true); // Дозволити запит
         } else {
