@@ -11,17 +11,22 @@ import { swaggerDocs } from './middlewares/swaggerDocs.js';
 // import { UPLOAD_DIR } from './constans/index.js';
 
 const port = Number(env('PORT', 3000));
+const corsConfig = { origin: allowedOrigins, credentials: true };
+const allowedOrigins = [
+  `http://localhost:${port}`,
+  'https://zymbsis.github.io',
+];
 
 export const startServer = () => {
   const app = express();
+  app.use(cookieParser());
   app.use(
     express.json({
       type: ['application/json', 'application/vnd.api+json'],
       limit: '100kb',
     }),
   );
-  app.use(cookieParser());
-  app.use(cors());
+  app.use(cors(corsConfig));
   app.use(
     pino({
       transport: {
