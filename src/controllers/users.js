@@ -50,6 +50,9 @@ export const refreshUserSessionController = async (req, res) => {
   // } = req;
   const { userId } = req.user._id;
   const { refreshToken } = req.body;
+  console.log(`USER:ID ${req.user}`);
+  console.log(`Token:ID ${req.body}`);
+
   const session = await refreshUserSession(userId, refreshToken);
 
   setupSession(res, session);
