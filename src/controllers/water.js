@@ -55,7 +55,7 @@ export const patchWaterIntakeController = async (req, res, next) => {
     return next(createHttpError(404, 'Selected water portion not found'));
   }
 
-  res.status(200).send({
+  res.json({
     status: 200,
     message: 'Successfully updated selected water portion',
     data: portion,
