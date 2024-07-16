@@ -35,6 +35,8 @@ export const loginUserController = async (req, res) => {
 };
 
 export const logoutUserController = async (req, res) => {
+  console.log(`USER:ID ${req.user._id}`);
+
   const { _id } = req.user;
   if (_id) {
     await logoutUser(_id);
@@ -59,8 +61,6 @@ export const refreshUserSessionController = async (req, res) => {
   // } = req;
   const { _id } = req.user;
   const { refreshToken } = req.body;
-  console.log(`USER:ID ${req.user}`);
-  console.log(`Token:ID ${req.body.refreshToken}`);
 
   const session = await refreshUserSession(_id, refreshToken);
 
