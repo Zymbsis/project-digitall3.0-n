@@ -14,7 +14,8 @@ import { removeCookies } from '../utils/removeCookies.js';
 // import { resetPassword } from '../services/auth.js';
 
 export const registerUserController = async (req, res) => {
-  const user = await registerUser(req.body);
+  const { body } = req;
+  const user = await registerUser(body);
   res.status(201).json({
     status: 201,
     message: 'Successfully registered a user!',
@@ -26,23 +27,28 @@ export const loginUserController = async (req, res) => {
   const { body } = req;
 
   const session = await loginUser(body);
-  setupSession(res, session);
+  const { accessToken } = session;
+
+  addCookies(res, session);
+
   res.json({
     status: 200,
     message: 'Successfully logged in an user!',
-    data: {
-      accessToken: session.accessToken,
-      refreshToken: session.refreshToken,
-    },
+    data: { accessToken },
   });
 };
 
 export const logoutUserController = async (req, res) => {
-  const { sessionId } = req.cookies;
+  const {
+    cookies: { sessionId },
+  } = req;
+
   if (sessionId) {
     await logoutUser(sessionId);
   }
+
   removeCookies(res);
+
   res.status(204).send();
 };
 
@@ -51,7 +57,8 @@ export const refreshUserSessionController = async (req, res, next) => {
     cookies: { sessionId, refreshToken },
   } = req;
 
-  const { accessToken } = await refreshUserSession(sessionId, refreshToken);
+  const session = await refreshUserSession(sessionId, refreshToken);
+  const { accessToken } = session;
 
   addCookies(res, session);
 
@@ -77,7 +84,13 @@ export const getCurrentUserController = async (req, res) => {
 };
 
 export const updateUserController = async (req, res) => {
-  const updatedUser = await updateUser(req.user._id, req.body);
+  const {
+    user: { _id: userId },
+    body,
+  } = req;
+
+  const updatedUser = await updateUser(userId, body);
+
   res.json({
     status: 200,
     message: 'User data updated successfully!',
@@ -87,6 +100,7 @@ export const updateUserController = async (req, res) => {
 
 export const getUsersCountController = async (req, res) => {
   const count = await getUsersCount();
+
   res.json({
     status: 200,
     message: 'Successfully counted all registered users.',
