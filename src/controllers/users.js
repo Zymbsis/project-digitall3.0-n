@@ -7,7 +7,8 @@ import {
   updateUser,
   getUsersCount,
 } from '../services/users.js';
-import { setupSession } from '../utils/setupSession.js';
+import { addCookies } from '../utils/addCookies.js';
+import { removeCookies } from '../utils/removeCookies.js';
 
 // import { requestResetToken } from '../services/auth.js';
 // import { resetPassword } from '../services/auth.js';
@@ -22,7 +23,9 @@ export const registerUserController = async (req, res) => {
 };
 
 export const loginUserController = async (req, res) => {
-  const session = await loginUser(req.body);
+  const { body } = req;
+
+  const session = await loginUser(body);
   setupSession(res, session);
   res.json({
     status: 200,
@@ -38,29 +41,24 @@ export const logoutUserController = async (req, res) => {
   if (sessionId) {
     await logoutUser(sessionId);
   }
-  res.clearCookie('sessionId');
-  res.clearCookie('refreshToken');
+  removeCookies(res);
   res.status(204).send();
 };
 
 export const refreshUserSessionController = async (req, res, next) => {
   try {
-    const sessionId = req.cookies.sessionId;
-    const refreshToken = req.cookies.refreshToken;
+    const {
+      cookies: { sessionId, refreshToken },
+    } = req;
 
-    console.log('sessionId', sessionId);
-    console.log('refreshToken', refreshToken);
+    const { accessToken } = await refreshUserSession(sessionId, refreshToken);
 
-    const session = await refreshUserSession(sessionId, refreshToken);
-
-    setupSession(res, session);
+    addCookies(res, session);
 
     res.json({
       status: 200,
       message: 'Successfully refreshed a session!',
-      data: {
-        accessToken: session.accessToken,
-      },
+      data: { accessToken },
     });
   } catch (error) {
     throw new Error(error.message);
@@ -68,11 +66,16 @@ export const refreshUserSessionController = async (req, res, next) => {
 };
 
 export const getCurrentUserController = async (req, res) => {
-  const user = await getCurrentUser(req.user._id);
+  const {
+    user: { _id: userId },
+  } = req;
+
+  const currentUser = await getCurrentUser(userId);
+
   res.json({
     status: 200,
     message: 'Successfully retrieved user information!',
-    data: user,
+    data: currentUser,
   });
 };
 
