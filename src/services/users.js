@@ -102,6 +102,8 @@ export const updateUser = async (_id, payload, options = {}) => {
   return updatedUser;
 };
 
+export const getUsersCount = async () => await UsersCollection.countDocuments();
+
 // export const requestResetToken = ctrlWrapper(async (email) => {
 //   const user = await UsersCollection.findOne({ email });
 //   if (!user) {
@@ -180,5 +182,3 @@ export const updateUser = async (_id, payload, options = {}) => {
 //     { password: encryptedPassword },
 //   );
 // };
-
-export const getUsersCount = async () => await UsersCollection.countDocuments();
