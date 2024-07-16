@@ -48,18 +48,16 @@ export const loginUser = async (payload) => {
 };
 
 //LOGOUT_USER//
-export const logoutUser = async (userId) => {
-  await SessionsCollection.deleteOne({ userId });
+
+export const logoutUser = async (sessionId) => {
+  await SessionsCollection.deleteOne({ _id: sessionId });
 };
-// export const logoutUser = async (sessionId) => {
-//   await SessionsCollection.deleteOne({ _id: sessionId });
-// };
 
 //REFRESH_USER//
 
-export const refreshUserSession = async (userId, refreshToken) => {
+export const refreshUserSession = async (_id, refreshToken) => {
   const session = await SessionsCollection.findOne({
-    userId,
+    _id,
     refreshToken,
   });
 
@@ -72,31 +70,11 @@ export const refreshUserSession = async (userId, refreshToken) => {
   if (isSessionTokenExpired) {
     throw createHttpError(401, 'Session token expired');
   }
-  await SessionsCollection.deleteOne({ userId, refreshToken });
+  await SessionsCollection.deleteOne({ _id, refreshToken });
   const newSession = await createSession(session.userId);
 
   return newSession;
 };
-// export const refreshUserSession = async (_id, refreshToken) => {
-//   const session = await SessionsCollection.findOne({
-//     _id,
-//     refreshToken,
-//   });
-
-//   if (!session) {
-//     throw createHttpError(401, 'Session not found, refresh error');
-//   }
-//   const isSessionTokenExpired =
-//     new Date() > new Date(session.refreshTokenValidUntil);
-
-//   if (isSessionTokenExpired) {
-//     throw createHttpError(401, 'Session token expired');
-//   }
-//   await SessionsCollection.deleteOne({ _id, refreshToken });
-//   const newSession = await createSession(session.userId);
-
-//   return newSession;
-// };
 
 //GET_CURRENT_USER//
 export const getCurrentUser = async (userId) => {
