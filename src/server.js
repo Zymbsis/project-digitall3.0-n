@@ -14,29 +14,14 @@ const port = Number(env('PORT', 3000));
 
 export const startServer = () => {
   const app = express();
-  app.use(cookieParser());
   app.use(
     express.json({
       type: ['application/json', 'application/vnd.api+json'],
       limit: '100kb',
     }),
   );
-  app.use(
-    cors({
-      origin: (origin, callback) => {
-        if (
-          origin &&
-          (origin === 'http://localhost:3001' ||
-            origin === 'https://zymbsis.github.io/project-digitall3.0-r')
-        ) {
-          callback(null, true); // Дозволити запит
-        } else {
-          callback(new Error('Not allowed by CORS')); // Заборонити запит
-        }
-      },
-      credentials: true,
-    }),
-  );
+  app.use(cookieParser());
+  app.use(cors());
   app.use(
     pino({
       transport: {
