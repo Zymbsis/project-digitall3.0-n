@@ -32,6 +32,7 @@ export const loginUserController = async (req, res) => {
     message: 'Successfully logged in an user!',
     data: {
       accessToken: session.accessToken,
+      refreshToken: session.refreshToken,
     },
   });
 };
@@ -46,23 +47,19 @@ export const logoutUserController = async (req, res) => {
 };
 
 export const refreshUserSessionController = async (req, res, next) => {
-  try {
-    const {
-      cookies: { sessionId, refreshToken },
-    } = req;
+  const {
+    cookies: { sessionId, refreshToken },
+  } = req;
 
-    const { accessToken } = await refreshUserSession(sessionId, refreshToken);
+  const { accessToken } = await refreshUserSession(sessionId, refreshToken);
 
-    addCookies(res, session);
+  addCookies(res, session);
 
-    res.json({
-      status: 200,
-      message: 'Successfully refreshed a session!',
-      data: { accessToken },
-    });
-  } catch (error) {
-    throw new Error(error.message);
-  }
+  res.json({
+    status: 200,
+    message: 'Successfully refreshed a session!',
+    data: { accessToken },
+  });
 };
 
 export const getCurrentUserController = async (req, res) => {
