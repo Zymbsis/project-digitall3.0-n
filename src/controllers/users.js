@@ -44,13 +44,13 @@ export const logoutUserController = async (req, res) => {
 };
 
 export const refreshUserSessionController = async (req, res) => {
-  const {
-    cookies: { sessionId, refreshToken },
-  } = req;
-  console.log('sessionId =', sessionId);
-  console.log('refreshToken =', refreshToken);
+  // const {
+  //   cookies: { sessionId, refreshToken },
+  // } = req;
+  // console.log('sessionId =', sessionId);
+  // console.log('refreshToken =', refreshToken);
 
-  const session = await refreshUserSession(sessionId, refreshToken);
+  const session = await refreshUserSession(req.user);
 
   setupSession(res, session);
 
@@ -63,6 +63,26 @@ export const refreshUserSessionController = async (req, res) => {
     },
   });
 };
+// export const refreshUserSessionController = async (req, res) => {
+//   const {
+//     cookies: { sessionId, refreshToken },
+//   } = req;
+//   console.log('sessionId =', sessionId);
+//   console.log('refreshToken =', refreshToken);
+
+//   const session = await refreshUserSession(sessionId, refreshToken);
+
+//   setupSession(res, session);
+
+//   res.json({
+//     status: 200,
+//     message: 'Successfully refreshed a session!',
+//     data: {
+//       accessToken: session.accessToken,
+//       session,
+//     },
+//   });
+// };
 
 export const getCurrentUserController = async (req, res) => {
   const user = await getCurrentUser(req.user._id);
