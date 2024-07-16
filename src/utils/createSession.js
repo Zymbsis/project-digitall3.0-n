@@ -10,8 +10,8 @@ export const createSession = async (id) => {
     userId: id,
     accessToken,
     refreshToken,
-    accessTokenValidUntil: new Date(Date.now() + FIFTEEN_MINUTES),
-    // accessTokenValidUntil: new Date(Date.now() + 10000),
+    // accessTokenValidUntil: new Date(Date.now() + FIFTEEN_MINUTES),
+    accessTokenValidUntil: new Date(Date.now() + 10000),
     refreshTokenValidUntil: new Date(Date.now() + THIRTY_DAYS),
   };
   const newSession = await SessionsCollection.create(newSessionObject);
