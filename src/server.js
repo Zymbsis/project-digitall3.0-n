@@ -11,10 +11,7 @@ import { swaggerDocs } from './middlewares/swaggerDocs.js';
 // import { UPLOAD_DIR } from './constans/index.js';
 
 const port = Number(env('PORT', 3000));
-const allowedOrigins = [
-  `http://localhost:${port}`,
-  'https://zymbsis.github.io',
-];
+const allowedOrigins = [`http://localhost:3001`, 'https://zymbsis.github.io'];
 const corsConfig = { origin: allowedOrigins, credentials: true };
 
 export const startServer = () => {
