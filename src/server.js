@@ -20,10 +20,18 @@ export const startServer = () => {
   app.use(
     express.json({
       type: ['application/json', 'application/vnd.api+json'],
-      limit: '100kb',
+      limit: '1000kb',
     }),
   );
+
+  const corsConfig = {
+    origin: ['http://localhost:3000', 'https://zymbsis.github.io'],
+    credentials: true,
+  };
+
   app.use(cors(corsConfig));
+  app.options('*', cors(corsConfig));
+
   app.use(
     pino({
       transport: {
@@ -31,7 +39,10 @@ export const startServer = () => {
       },
     }),
   );
+
+  app.use(cookieParser());
   // app.use('/uploads', express.static(UPLOAD_DIR));
+
   app.use('/api-docs', swaggerDocs());
 
   app.use(router);
