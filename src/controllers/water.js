@@ -81,9 +81,10 @@ export const deleteWaterIntakeController = async (req, res, next) => {
 export const getInfoByDayController = async (req, res) => {
   const {
     params: { date },
+    user: { _id },
   } = req;
 
-  const data = await getInfoByDay(date);
+  const data = await getInfoByDay(date, _id);
 
   res.json({
     status: 200,
@@ -97,9 +98,10 @@ export const getInfoByDayController = async (req, res) => {
 export const getInfoByMonthController = async (req, res) => {
   const {
     params: { date },
+    user: { _id },
   } = req;
 
-  const data = await getInfoByMonth(date);
+  const data = await getInfoByMonth(date, _id);
 
   res.json({
     status: 200,

@@ -25,7 +25,7 @@ paths:
     post:
       $ref: ../swagger/paths/users/refresh/post.yaml
   /users/update:
-    post:
+    patch:
       $ref: ../swagger/paths/users/update/post.yaml
   /users/logout:
     post:

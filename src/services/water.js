@@ -11,9 +11,9 @@ export const patchWaterIntake = async (_id, userId, payload) =>
 export const deleteWaterIntake = async (_id, userId) =>
   await Water.findOneAndDelete({ _id, userId });
 
-export const getInfoByDay = async (date) => {
+export const getInfoByDay = async (date, userId) => {
   const result = await Water.aggregate([
-    { $match: { date } },
+    { $match: { date, userId } },
     { $sort: { time: 1 } },
     {
       $group: {
@@ -53,11 +53,11 @@ export const getInfoByDay = async (date) => {
   }
 };
 
-export const getInfoByMonth = async (date) => {
+export const getInfoByMonth = async (date, userId) => {
   const monthQuery = new RegExp(`^${date}`);
 
   const result = await Water.aggregate([
-    { $match: { date: { $regex: monthQuery } } },
+    { $match: { date: { $regex: monthQuery }, userId } },
     { $sort: { date: 1 } },
     {
       $group: {

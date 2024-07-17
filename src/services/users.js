@@ -3,12 +3,14 @@ import createHttpError from 'http-errors';
 import { UsersCollection } from '../db/models/user.js';
 import { SessionsCollection } from '../db/models/session.js';
 import { getTokensData } from '../utils/getTokensData.js';
-// import { TEMPLATES_DIR } from '../constants/index.js';
-// import jwt from 'jsonwebtoken';
-// import { SMTP } from '../constants/index.js';
-// import { env } from '../utils/env.js';
-// import { sendEmail } from '../utils/sendMail.js';
-// import handlebars from 'handlebars';
+import jwt from 'jsonwebtoken';
+import { env } from '../utils/env.js';
+import { validateToken } from '../utils/validateToken.js';
+import { ENV_VARS } from '../constants/index.js';
+import { getMailTemplate } from '../../../nodejs-hw-mongodb/src/utils/getMailTemplate.js';
+import { sendMail } from '../utils/sendMail.js';
+
+import { TEMPLATES_DIR } from '../constants/index.js';
 // import path from 'node:path';
 // import fs from 'node:fs/promises';
 // import { ctrlWrapper } from '../utils/ctrlWrapper.js';
@@ -27,6 +29,34 @@ export const registerUser = async (payload) => {
   return await UsersCollection.create({
     ...payload,
     password: encryptedPassword,
+  });
+};
+
+export const activateUser = async (token) => {
+  const { email, _id } = validateToken(token);
+
+  const user = await UsersCollection.findOne({ email, _id });
+
+  if (!user) {
+    throw createHttpError(404, 'User not found');
+  }
+
+  if (user.activated) {
+    return await SessionsCollection.create({
+      userId: user._id,
+      ...getTokensData(),
+    });
+  }
+
+  const activatedUser = await UsersCollection.findOneAndUpdate(
+    { email, _id },
+    { activated: true },
+    { new: true },
+  );
+
+  return await SessionsCollection.create({
+    userId: activatedUser._id,
+    ...getTokensData(),
   });
 };
 
@@ -74,7 +104,7 @@ export const refreshUserSession = async (_id, refreshToken) => {
   if (isSessionTokenExpired) {
     throw createHttpError(401, 'Session token expired');
   }
-  await SessionsCollection.deleteOne({ _id, refreshToken });
+  await SessionsCollection.findOneAndDelete({ _id, refreshToken });
 
   return await SessionsCollection.create({ userId, ...getTokensData() });
 };
@@ -104,56 +134,77 @@ export const updateUser = async (_id, payload, options = {}) => {
 
 export const getUsersCount = async () => await UsersCollection.countDocuments();
 
-// export const requestResetToken = ctrlWrapper(async (email) => {
+export const requestActivation = async (email) => {
+  const user = await UsersCollection.findOne({ email });
+
+  if (!user) {
+    throw createHttpError(404, 'User not found.');
+  }
+
+  const activationToken = jwt.sign(
+    { sub: user._id, email },
+    env(ENV_VARS.JWT_SECRET),
+    { expiresIn: '10m' },
+  );
+
+  const domain = env(ENV_VARS.APP_DOMAIN);
+  const link = `${domain}/activation?token=${activationToken}`;
+  const template = getMailTemplate('activation-mail.html');
+  const html = template({ link });
+
+  try {
+    await sendMail({
+      from: env(ENV_VARS.SMTP_FROM),
+      to: email,
+      subject: 'Activate your account now / AquaTracker',
+      html,
+    });
+  } catch (error) {
+    console.error(error);
+
+    throw createHttpError(
+      500,
+      'Failed to send the email, please try again later.',
+    );
+  }
+};
+
+// export const requestResetToken = async (email) => {
 //   const user = await UsersCollection.findOne({ email });
-//   if (!user) {
-//     throw createHttpError(404, 'User not found');
-//   }
+
+//   if (!user) throw createHttpError(404, 'User not found.');
 
 //   const resetToken = jwt.sign(
+//     { sub: user._id, email },
+//     env(ENV_VARS.JWT_SECRET),
 //     {
-//       sub: user._id,
-//       email,
-//     },
-//     env('JWT_SECRET'),
-//     {
-//       expiresIn: '5m',
+//       expiresIn: '15m',
 //     },
 //   );
+//   const domain = env(ENV_VARS.APP_DOMAIN);
+//   const { name } = user;
+//   const link = `${domain}/auth/reset-password?token=${resetToken}`;
 
-//   const resetPasswordLink = `${env(
-//     'APP_DOMAIN',
-//   )}/reset-password?token=${resetToken}`;
+//   const template = await getMailTemplate('reset-password-mail.html');
+//   const html = template({ name, link });
 
-//   await sendEmail({
-//     from: env(SMTP.SMTP_FROM),
-//     to: email,
-//     subject: 'Reset your password',
-//     html: `<p>Click <a href="${resetPasswordLink}">here</a> to reset your password!</p>`,
-//   });
+//   try {
+//     await sendMail({
+//       from: env(ENV_VARS.SMTP_FROM),
+//       to: email,
+//       subject: 'Reset your password / Contacts App',
+//       html,
+//     });
+//     console.log('resetToken : ', resetToken);
+//   } catch (error) {
+//     console.error(error);
 
-//   const resetPasswordTemplatePath = path.join(
-//     TEMPLATES_DIR,
-//     'reset-password-email.html',
-//   );
-
-//   const templateSource = (
-//     await fs.readFile(resetPasswordTemplatePath)
-//   ).toString();
-
-//   const template = handlebars.compile(templateSource);
-//   const html = template({
-//     name: user.name,
-//     link: resetPasswordLink,
-//   });
-
-//   await sendEmail({
-//     from: env(SMTP.SMTP_FROM),
-//     to: email,
-//     subject: 'Reset your password',
-//     html,
-//   });
-// });
+//     throw createHttpError(
+//       500,
+//       'Failed to send the email, please try again later.',
+//     );
+//   }
+// };
 
 // export const resetPassword = async (payload) => {
 //   let entries;
