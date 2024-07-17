@@ -10,7 +10,10 @@ import {
   requestActivation,
 } from '../services/users.js';
 import { addCookies } from '../utils/addCookies.js';
+import { env } from '../utils/env.js';
 import { removeCookies } from '../utils/removeCookies.js';
+import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
+import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
 
 // import { requestResetToken } from '../services/auth.js';
 // import { resetPassword } from '../services/auth.js';
@@ -107,9 +110,18 @@ export const updateUserController = async (req, res) => {
   const {
     user: { _id: userId },
     body,
+    file,
   } = req;
 
-  const updatedUser = await updateUser(userId, body);
+  let avatar;
+  if (file) {
+    if (env('ENABLE_CLOUDINARY') === 'true') {
+      avatar = await saveFileToCloudinary(file);
+    } else {
+      avatar = await saveFileToUploadDir(file);
+    }
+  }
+  const updatedUser = await updateUser(userId, { ...body, avatar });
 
   res.json({
     status: 200,

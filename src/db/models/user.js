@@ -10,7 +10,11 @@ const usersSchema = new Schema(
     dailyNorma: { type: Number, min: 0, max: 10000, default: 1500 },
     weight: { type: Number, min: 0, default: 0 },
     activeHours: { type: Number, min: 0, max: 12, default: 0 },
-    avatar: { type: String, default: '' },
+    avatar: {
+      type: String,
+      default:
+        'https://res.cloudinary.com/dvkqniafr/image/upload/v1721220091/kotik_vae38k.jpg',
+    },
   },
   { timestamps: true, versionKey: false },
 );

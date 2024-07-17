@@ -17,7 +17,7 @@ export const getAllWaterIntakesController = async (req, res, next) => {
 
   res.json({
     status: 200,
-    message: result.length
+    message: data.length
       ? 'Successfully found all water intakes.'
       : 'No water intakes has been added yet.',
     data,
