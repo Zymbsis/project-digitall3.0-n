@@ -6,6 +6,7 @@ import {
   registerUserController,
   updateUserController,
   getUsersCountController,
+  activateUserController,
 } from '../controllers/users.js';
 import { validateBody } from '../middlewares/validateBody.js';
 import { loginUserSchema } from '../validation/users.js';
@@ -47,6 +48,8 @@ router.patch(
 );
 
 router.get('/count', getUsersCountController);
+
+router.post('/activate', activateUserController);
 
 // router.post(
 //   '/send-reset-email',

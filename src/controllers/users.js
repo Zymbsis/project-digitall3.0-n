@@ -6,6 +6,8 @@ import {
   getCurrentUser,
   updateUser,
   getUsersCount,
+  activateUser,
+  requestActivation,
 } from '../services/users.js';
 import { addCookies } from '../utils/addCookies.js';
 import { removeCookies } from '../utils/removeCookies.js';
@@ -16,10 +18,28 @@ import { removeCookies } from '../utils/removeCookies.js';
 export const registerUserController = async (req, res) => {
   const { body } = req;
   const user = await registerUser(body);
+  await requestActivation(user.email);
   res.status(201).json({
     status: 201,
     message: 'Successfully registered a user!',
     data: user,
+  });
+};
+
+export const activateUserController = async (req, res) => {
+  const {
+    body: { token },
+  } = req;
+
+  const session = await activateUser(token);
+  const { accessToken } = session;
+
+  addCookies(res, session);
+
+  res.json({
+    status: 200,
+    message: 'Successfully activated and logged in a user!',
+    data: { accessToken },
   });
 };
 
@@ -33,7 +53,7 @@ export const loginUserController = async (req, res) => {
 
   res.json({
     status: 200,
-    message: 'Successfully logged in an user!',
+    message: 'Successfully logged in a user!',
     data: { accessToken },
   });
 };
@@ -105,6 +125,20 @@ export const getUsersCountController = async (req, res) => {
     status: 200,
     message: 'Successfully counted all registered users.',
     data: { count },
+  });
+};
+
+export const requestActivationController = async (req, res) => {
+  const {
+    body: { email },
+  } = req;
+
+  await requestActivation(email);
+
+  res.json({
+    status: 200,
+    message: 'Activation link has been successfully sent.',
+    data: {},
   });
 };
 
