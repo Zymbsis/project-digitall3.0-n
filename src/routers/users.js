@@ -13,6 +13,7 @@ import { loginUserController } from '../controllers/users.js';
 import { logoutUserController } from '../controllers/users.js';
 import { refreshUserSessionController } from '../controllers/users.js';
 import { authenticate } from '../middlewares/authenticate.js';
+import { upload } from '../middlewares/uploadMiddleware.js';
 
 // import { requestResetEmailSchema } from '../validation/auth.js';
 // import { requestResetEmailController } from '../controllers/auth.js';
@@ -42,6 +43,7 @@ router.get('/current', authenticate, ctrlWrapper(getCurrentUserController));
 router.patch(
   '/update',
   authenticate,
+  upload.single('avatar'),
   validateBody(updateUserSchema),
   ctrlWrapper(updateUserController),
 );
