@@ -24,10 +24,10 @@ export const startServer = () => {
     }),
   );
 
-  const corsConfig = {
-    origin: ['http://localhost:3000', 'https://zymbsis.github.io'],
-    credentials: true,
-  };
+  // const corsConfig = {
+  //   origin: ['http://localhost:3000', 'https://zymbsis.github.io'],
+  //   credentials: true,
+  // };
 
   app.use(cors(corsConfig));
   app.options('*', cors(corsConfig));
