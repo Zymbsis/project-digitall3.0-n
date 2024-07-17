@@ -7,14 +7,15 @@ import {
   updateUser,
   getUsersCount,
 } from '../services/users.js';
-import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
-import { setupSession } from '../utils/setupSession.js';
+import { addCookies } from '../utils/addCookies.js';
+import { removeCookies } from '../utils/removeCookies.js';
 
 // import { requestResetToken } from '../services/auth.js';
 // import { resetPassword } from '../services/auth.js';
 
 export const registerUserController = async (req, res) => {
-  const user = await registerUser(req.body);
+  const { body } = req;
+  const user = await registerUser(body);
   res.status(201).json({
     status: 201,
     message: 'Successfully registered a user!',
@@ -23,47 +24,62 @@ export const registerUserController = async (req, res) => {
 };
 
 export const loginUserController = async (req, res) => {
-  const session = await loginUser(req.body);
-  setupSession(res, session);
+  const { body } = req;
+
+  const session = await loginUser(body);
+  const { accessToken } = session;
+
+  addCookies(res, session);
+
   res.json({
     status: 200,
     message: 'Successfully logged in an user!',
-    data: {
-      accessToken: session.accessToken,
-    },
+    data: { accessToken },
   });
 };
 
 export const logoutUserController = async (req, res) => {
-  const { sessionId } = req.cookies;
+  const {
+    cookies: { sessionId },
+  } = req;
+
   if (sessionId) {
     await logoutUser(sessionId);
   }
-  res.clearCookie('sessionId');
-  res.clearCookie('refreshToken');
+
+  removeCookies(res);
+
   res.status(204).send();
 };
 
-export const refreshUserSessionController = async (req, res) => {
-  const { sessionId, refreshToken } = req.cookies;
+export const refreshUserSessionController = async (req, res, next) => {
+  const {
+    cookies: { sessionId, refreshToken },
+  } = req;
+
   const session = await refreshUserSession(sessionId, refreshToken);
-  setupSession(res, session);
+  const { accessToken } = session;
+
+  addCookies(res, session);
 
   res.json({
     status: 200,
     message: 'Successfully refreshed a session!',
-    data: {
-      accessToken: session.accessToken,
-    },
+    data: { accessToken },
   });
 };
 
 export const getCurrentUserController = async (req, res) => {
-  const user = await getCurrentUser(req.user._id);
+  const {
+    user: { _id: userId },
+  } = req;
+
+  const currentUser = await getCurrentUser(userId);
+
   res.json({
     status: 200,
     message: 'Successfully retrieved user information!',
-    data: user,
+    data: currentUser,
   });
 };
 
@@ -79,6 +95,13 @@ export const updateUserController = async (req, res) => {
   }
   const updatedUser = await updateUser(req.user._id, updateData);
 
+  const {
+    user: { _id: userId },
+    body,
+  } = req;
+
+  const updatedUser = await updateUser(userId, body);
+
   res.json({
     status: 200,
     message: 'User data updated successfully!',
@@ -88,6 +111,7 @@ export const updateUserController = async (req, res) => {
 
 export const getUsersCountController = async (req, res) => {
   const count = await getUsersCount();
+
   res.json({
     status: 200,
     message: 'Successfully counted all registered users.',
