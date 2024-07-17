@@ -7,7 +7,7 @@ import jwt from 'jsonwebtoken';
 import { env } from '../utils/env.js';
 import { validateToken } from '../utils/validateToken.js';
 import { ENV_VARS } from '../constants/index.js';
-import { getMailTemplate } from '../../../nodejs-hw-mongodb/src/utils/getMailTemplate.js';
+import { getMailTemplate } from '../utils/getMailTemplate.js';
 import { sendMail } from '../utils/sendMail.js';
 
 import { TEMPLATES_DIR } from '../constants/index.js';
