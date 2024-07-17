@@ -8,7 +8,10 @@ import {
   getUsersCount,
 } from '../services/users.js';
 import { addCookies } from '../utils/addCookies.js';
+import { env } from '../utils/env.js';
 import { removeCookies } from '../utils/removeCookies.js';
+import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
+import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
 
 // import { requestResetToken } from '../services/auth.js';
 // import { resetPassword } from '../services/auth.js';
@@ -84,23 +87,21 @@ export const getCurrentUserController = async (req, res) => {
 };
 
 export const updateUserController = async (req, res) => {
-  let photoUrl;
-  if (req.file) {
-    photoUrl = await saveFileToCloudinary(req.file.buffer);
-  }
-
-  const updateData = { ...req.body };
-  if (photoUrl) {
-    updateData.avatar = photoUrl;
-  }
-  const updatedUser = await updateUser(req.user._id, updateData);
-
   const {
     user: { _id: userId },
     body,
+    file,
   } = req;
 
-  const updatedUser = await updateUser(userId, body);
+  let avatar;
+  if (file) {
+    if (env('ENABLE_CLOUDINARY') === 'true') {
+      avatar = await saveFileToCloudinary(file);
+    } else {
+      avatar = await saveFileToUploadDir(file);
+    }
+  }
+  const updatedUser = await updateUser(userId, { ...body, avatar });
 
   res.json({
     status: 200,
