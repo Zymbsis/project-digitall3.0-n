@@ -6,12 +6,12 @@ export const addCookies = (res, session) => {
     httpOnly: true,
     secure: true,
     sameSite: 'None',
-    expires: new Date(Date.now() + THIRTY_DAYS),
+    expire: new Date(Date.now() + THIRTY_DAYS),
   });
   res.cookie('refreshToken', refreshToken, {
     httpOnly: true,
     secure: true,
     sameSite: 'None',
-    expires: new Date(Date.now() + THIRTY_DAYS),
+    expire: new Date(Date.now() + THIRTY_DAYS),
   });
 };
