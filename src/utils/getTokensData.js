@@ -1,5 +1,5 @@
 import { randomBytes } from 'crypto';
-import { FIFTEEN_MINUTES, THIRTY_DAYS } from '../constants/index.js';
+import { FIFTEEN_MINUTES, ONE_MONTH } from '../constants/index.js';
 
 export const getTokensData = () => {
   const accessToken = randomBytes(30).toString('base64');
@@ -9,6 +9,6 @@ export const getTokensData = () => {
     accessToken,
     refreshToken,
     accessTokenValidUntil: new Date(Date.now() + FIFTEEN_MINUTES),
-    refreshTokenValidUntil: new Date(Date.now() + THIRTY_DAYS),
+    refreshTokenValidUntil: new Date(Date.now() + ONE_MONTH),
   };
 };

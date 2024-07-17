@@ -1,4 +1,4 @@
-import { THIRTY_DAYS } from '../constants/index.js';
+import { ONE_MONTH } from '../constants/index.js';
 
 export const addCookies = (res, session) => {
   const { _id, refreshToken } = session;
@@ -6,12 +6,12 @@ export const addCookies = (res, session) => {
     httpOnly: true,
     secure: true,
     sameSite: 'None',
-    expire: new Date(Date.now() + THIRTY_DAYS),
+    expire: new Date(Date.now() + ONE_MONTH),
   });
   res.cookie('refreshToken', refreshToken, {
     httpOnly: true,
     secure: true,
     sameSite: 'None',
-    expire: new Date(Date.now() + THIRTY_DAYS),
+    expire: new Date(Date.now() + ONE_MONTH),
   });
 };
