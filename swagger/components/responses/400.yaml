@@ -10,6 +10,7 @@ content:
         message:
           type: string
           example: Something went wrong
-        error:
-          type: string
-          example: Bad request
+        data:
+          type: object
+          properties:
+            message: 'Bad request'
