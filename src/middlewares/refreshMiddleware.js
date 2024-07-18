@@ -1,3 +1,4 @@
+import createHttpError from 'http-errors';
 import { SessionsCollection } from '../db/models/session.js';
 import { removeCookies } from '../utils/removeCookies.js';
 

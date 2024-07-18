@@ -1,3 +1,4 @@
+import createHttpError from 'http-errors';
 import { SessionsCollection } from '../db/models/session.js';
 
 export const validateSession = async (req, res, next) => {
