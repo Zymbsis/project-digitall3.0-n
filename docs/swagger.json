@@ -517,9 +517,9 @@
         "tags": [
           "Users"
         ],
-        "summary": "Gets a count of all registered users.",
+        "summary": "Count all registered users",
         "operationId": "getCountController",
-        "description": "Gets list of water portions",
+        "description": "Returns a count of all registered users.",
         "security": [
           {
             "bearerAuth": []
@@ -539,7 +539,7 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Successfully found all water portions."
+                      "example": "Successfully counted all users."
                     },
                     "data": {
                       "type": "object",
@@ -812,6 +812,9 @@
           "401": {
             "$ref": "#/components/responses/401"
           },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
           "500": {
             "description": "Server error"
           }
@@ -1062,9 +1065,11 @@
                   "type": "string",
                   "example": "Something went wrong"
                 },
-                "error": {
-                  "type": "string",
-                  "example": "Bad request"
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "message": "Bad request"
+                  }
                 }
               }
             }
@@ -1172,7 +1177,9 @@
             "default": "User"
           },
           "password": {
-            "description": "User password"
+            "description": "User password",
+            "minLength": 8,
+            "maxLength": 64
           },
           "gender": {
             "type": "string",

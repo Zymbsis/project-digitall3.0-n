@@ -49,5 +49,7 @@ responses:
               $ref: ../../../components/schemas/water.yaml
   401:
     $ref: ../../../components/responses/401.yaml
+  404:
+    $ref: ../../../components/responses/404.yaml
   500:
     description: Server error

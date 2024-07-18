@@ -17,6 +17,8 @@ properties:
     default: User
   password:
     description: User password
+    minLength: 8
+    maxLength: 64
   gender:
     type: string
     enum: [man, woman]
