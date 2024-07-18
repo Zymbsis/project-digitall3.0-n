@@ -10,7 +10,7 @@ import { ENV_VARS } from '../constants/index.js';
 import { getMailTemplate } from '../utils/getMailTemplate.js';
 import { sendMail } from '../utils/sendMail.js';
 
-import { TEMPLATES_DIR } from '../constants/index.js';
+// import { TEMPLATES_DIR } from '../constants/index.js';
 // import path from 'node:path';
 // import fs from 'node:fs/promises';
 // import { ctrlWrapper } from '../utils/ctrlWrapper.js';
