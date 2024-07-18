@@ -26,7 +26,8 @@ export const authenticate = async (req, res, next) => {
     new Date() > new Date(session.accessTokenValidUntil);
 
   if (isAccessTokenExpired) {
-    const isRefreshRequest = req.path.includes('/users/refresh');
+    const isRefreshRequest = req.path.includes('/refresh');
+    console.log(req.path);
 
     isRefreshRequest
       ? next()
