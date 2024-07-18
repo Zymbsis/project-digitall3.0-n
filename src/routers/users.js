@@ -15,6 +15,7 @@ import { logoutUserController } from '../controllers/users.js';
 import { refreshUserSessionController } from '../controllers/users.js';
 import { authenticate } from '../middlewares/authenticate.js';
 import { upload } from '../middlewares/uploadMiddleware.js';
+import { validateSession } from '../middlewares/validateSession.js';
 
 // import { requestResetEmailSchema } from '../validation/auth.js';
 // import { requestResetEmailController } from '../controllers/auth.js';
@@ -40,6 +41,7 @@ router.post('/logout', authenticate, ctrlWrapper(logoutUserController));
 router.post(
   '/refresh',
   authenticate,
+  validateSession,
   ctrlWrapper(refreshUserSessionController),
 );
 
