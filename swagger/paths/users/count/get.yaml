@@ -1,8 +1,8 @@
 tags:
   - Users
-summary: Gets a count of all registered users.
+summary: Count all registered users
 operationId: getCountController
-description: Gets list of water portions
+description: Returns a count of all registered users.
 security:
   - bearerAuth: []
 responses:
@@ -18,7 +18,7 @@ responses:
               example: 200
             message:
               type: string
-              example: Successfully found all water portions.
+              example: Successfully counted all users.
             data:
               type: object
               properties:
