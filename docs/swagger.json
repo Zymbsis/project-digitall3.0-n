@@ -337,7 +337,7 @@
       }
     },
     "/users/update": {
-      "post": {
+      "patch": {
         "tags": [
           "Users"
         ],
