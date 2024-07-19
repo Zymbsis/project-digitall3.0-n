@@ -21,7 +21,7 @@ import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
 export const registerUserController = async (req, res) => {
   const { body } = req;
   const user = await registerUser(body);
-  await requestActivation(user.email);
+  // await requestActivation(user.email);
   res.status(201).json({
     status: 201,
     message: 'Successfully registered a user!',
