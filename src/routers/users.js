@@ -1,6 +1,10 @@
 import { Router } from 'express';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
-import { registerUserSchema, updateUserSchema } from '../validation/users.js';
+import {
+  activateUserSchema,
+  registerUserSchema,
+  updateUserSchema,
+} from '../validation/users.js';
 import {
   getCurrentUserController,
   registerUserController,
@@ -57,7 +61,11 @@ router.patch(
 
 router.get('/count', getUsersCountController);
 
-router.post('/activate', activateUserController);
+router.post(
+  '/activate',
+  validateBody(activateUserSchema),
+  ctrlWrapper(activateUserController),
+);
 
 // router.post(
 //   '/send-reset-email',
