@@ -66,7 +66,7 @@ responses:
                 avatar:
                   type: string
                   format: binary
-                  default: Here should be a placeholder image
+                  default: https://res.cloudinary.com/dvkqniafr/image/upload/v1721220091/kotik_vae38k.jpg
                 createdAt:
                   description: Timestamp (auto-generated)
                   type: string

@@ -121,7 +121,7 @@
                         "avatar": {
                           "type": "string",
                           "format": "binary",
-                          "default": "Here should be a placeholder image"
+                          "default": "https://res.cloudinary.com/dvkqniafr/image/upload/v1721220091/kotik_vae38k.jpg"
                         },
                         "createdAt": {
                           "description": "Timestamp (auto-generated)",
@@ -1056,6 +1056,11 @@
           "application/json": {
             "schema": {
               "type": "object",
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
               "properties": {
                 "status": {
                   "type": "integer",
@@ -1067,8 +1072,14 @@
                 },
                 "data": {
                   "type": "object",
+                  "required": [
+                    "message"
+                  ],
                   "properties": {
-                    "message": "Bad request"
+                    "message": {
+                      "type": "string",
+                      "example": "Bad request"
+                    }
                   }
                 }
               }
