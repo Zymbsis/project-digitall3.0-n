@@ -40,7 +40,7 @@ export const activateUser = async (token) => {
     entries = jwt.verify(token, env(ENV_VARS.JWT_SECRET));
   } catch (err) {
     if (err instanceof Error)
-      throw createHttpError(401, 'Activation token is expired or invalid.');
+      throw createHttpError(401, 'Activation token expired or invalid');
     throw err;
   }
 
@@ -108,7 +108,7 @@ export const refreshUserSession = async (_id, refreshToken) => {
   });
 
   if (!session) {
-    throw createHttpError(401, 'Session not found. Please, sign in again.');
+    throw createHttpError(401, 'Session not found. Please, sign in again');
   }
 
   const { userId } = session;
@@ -159,7 +159,7 @@ export const requestActivation = async (email) => {
   const user = await UsersCollection.findOne({ email });
 
   if (!user) {
-    throw createHttpError(404, 'User not found.');
+    throw createHttpError(404, 'User not found');
   }
 
   const activationToken = jwt.sign(
@@ -185,7 +185,7 @@ export const requestActivation = async (email) => {
 
     throw createHttpError(
       500,
-      'Failed to send the email, please try again later.',
+      'Failed to send the email, please, try again later',
     );
   }
 };
