@@ -17,7 +17,7 @@ export const ENV_VARS = {
   API_KEY: 'API_KEY',
   API_SECRET: 'API_SECRET',
 };
-export const FIFTEEN_MINUTES = 10000;
+export const FIFTEEN_MINUTES = 15 * 60 * 1000;
 
 export const ONE_MONTH = 30 * 24 * 60 * 60 * 1000;
 
