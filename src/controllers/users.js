@@ -21,7 +21,7 @@ import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
 export const registerUserController = async (req, res) => {
   const { body } = req;
   const user = await registerUser(body);
-  // await requestActivation(user.email);
+  await requestActivation(user.email);
   res.status(201).json({
     status: 201,
     message: 'Successfully registered a user!',
@@ -31,10 +31,10 @@ export const registerUserController = async (req, res) => {
 
 export const activateUserController = async (req, res) => {
   const {
-    body: { token },
+    body: { activationToken },
   } = req;
 
-  const session = await activateUser(token);
+  const session = await activateUser(activationToken);
   const { accessToken } = session;
 
   addCookies(res, session);
