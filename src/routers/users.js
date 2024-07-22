@@ -13,6 +13,7 @@ import {
   activateUserController,
   getGoogleOAuthUrlController,
   loginWithGoogleController,
+  requestActivationController,
 } from '../controllers/users.js';
 
 import {
@@ -80,6 +81,11 @@ router.post(
   '/activate',
   validateBody(activateUserSchema),
   ctrlWrapper(activateUserController),
+);
+router.post(
+  '/request-activation',
+  validateBody(activateUserSchema),
+  ctrlWrapper(requestActivationController),
 );
 
 // router.post(

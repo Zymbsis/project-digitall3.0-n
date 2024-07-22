@@ -181,21 +181,26 @@ export const updateUser = async (_id, payload, options = {}) => {
 
 export const getUsersCount = async () => await UsersCollection.countDocuments();
 
-export const requestActivation = async (email) => {
+export const requestActivation = async (expiredActivationToken) => {
+  const { email } = jwt.decode(
+    expiredActivationToken,
+    env(ENV_VARS.JWT_SECRET),
+  );
+
   const user = await UsersCollection.findOne({ email });
 
   if (!user) {
     throw createHttpError(404, 'User not found');
   }
 
-  const activationToken = jwt.sign(
+  const newActivationToken = jwt.sign(
     { sub: user._id, email },
     env(ENV_VARS.JWT_SECRET),
     { expiresIn: '10m' },
   );
 
   const domain = env(ENV_VARS.APP_DOMAIN);
-  const link = `${domain}/project-digitall3.0-r/activation?token=${activationToken}`;
+  const link = `${domain}/project-digitall3.0-r/activation?token=${newActivationToken}`;
   const template = await getMailTemplate('activation-mail.html');
   const html = template({ name: user.name, link });
 
@@ -203,7 +208,7 @@ export const requestActivation = async (email) => {
     await sendMail({
       from: env(ENV_VARS.SMTP_FROM),
       to: email,
-      subject: 'AquaTracker: Activate your account now!',
+      subject: 'AquaTracker: New activation link is here!',
       html,
     });
   } catch (error) {
