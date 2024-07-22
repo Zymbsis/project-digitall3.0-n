@@ -19,8 +19,8 @@ export const ENV_VARS = {
   GOOGLE_AUTH_CLIENT_ID: 'GOOGLE_AUTH_CLIENT_ID',
   GOOGLE_AUTH_CLIENT_SECRET: 'GOOGLE_AUTH_CLIENT_SECRET',
 };
-export const FIFTEEN_MINUTES = 5000;
 
+export const FIFTEEN_MINUTES = 15 * 60 * 1000;
 export const ONE_MONTH = 30 * 24 * 60 * 60 * 1000;
 
 export const TEMP_UPLOAD_DIR = path.join(process.cwd(), 'temp');

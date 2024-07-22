@@ -3,6 +3,10 @@ content:
   application/json:
     schema:
       type: object
+      required:
+        - status
+        - message
+        - data
       properties:
         status:
           type: integer
@@ -12,5 +16,9 @@ content:
           example: Something went wrong
         data:
           type: object
+          required:
+            - message
           properties:
-            message: 'Bad request'
+            message:
+              type: string
+              example: Bad request
