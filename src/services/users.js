@@ -142,8 +142,7 @@ export const loginUser = async ({ email, password }) => {
   }
 
   if (!user.activated) {
-    s;
-    throw createHttpError(404, 'Please, activate your accout first.');
+    throw createHttpError(404, 'Please, activate your account first.');
   }
 
   await SessionsCollection.deleteOne({ userId: user._id });
