@@ -8,9 +8,11 @@ import {
   getUsersCount,
   activateUser,
   requestActivation,
+  loginOrSignupWithGoogle,
 } from '../services/users.js';
 import { addCookies } from '../utils/addCookies.js';
 import { env } from '../utils/env.js';
+import { generateAuthUrl } from '../utils/googleOAuth2.js';
 import { removeCookies } from '../utils/removeCookies.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
@@ -18,10 +20,34 @@ import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
 // import { requestResetToken } from '../services/auth.js';
 // import { resetPassword } from '../services/auth.js';
 
+export const getGoogleOAuthUrlController = async (req, res) => {
+  const url = generateAuthUrl();
+  res.json({
+    status: 200,
+    message: 'Successfully get Google OAuth url!',
+    data: {
+      url,
+    },
+  });
+};
+
+export const loginWithGoogleController = async (req, res) => {
+  const session = await loginOrSignupWithGoogle(req.body.code);
+  const { accessToken } = session;
+
+  addCookies(res, session);
+
+  res.json({
+    status: 200,
+    message: 'Successfully logged in via Google OAuth!',
+    data: { accessToken },
+  });
+};
+
 export const registerUserController = async (req, res) => {
   const { body } = req;
   const user = await registerUser(body);
-  // await requestActivation(user.email);
+  await requestActivation(user.email);
   res.status(201).json({
     status: 201,
     message: 'Successfully registered a user!',
@@ -31,10 +57,10 @@ export const registerUserController = async (req, res) => {
 
 export const activateUserController = async (req, res) => {
   const {
-    body: { token },
+    body: { activationToken },
   } = req;
 
-  const session = await activateUser(token);
+  const session = await activateUser(activationToken);
   const { accessToken } = session;
 
   addCookies(res, session);
@@ -51,6 +77,15 @@ export const loginUserController = async (req, res) => {
 
   const session = await loginUser(body);
   const { accessToken } = session;
+  // const { accessToken, isActivated } = session;
+
+  // if (!isActivated) {
+  //   res.json({
+  //     status: 401,
+  //     message: 'Please, activate your account.',
+  //     data: {},
+  //   });
+  // }
 
   addCookies(res, session);
 

@@ -21,6 +21,14 @@ export const updateUserSchema = Joi.object({
   avatar: Joi.string(),
 });
 
+export const activateUserSchema = Joi.object({
+  activationToken: Joi.string().required(),
+});
+
+export const loginWithGoogleOAuthSchema = Joi.object({
+  code: Joi.string().required(),
+});
+
 // export const requestResetEmailSchema = Joi.object({
 //   email: Joi.string().email().required(),
 // });
