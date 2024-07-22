@@ -90,10 +90,10 @@ export const activateUser = async (activationToken) => {
 
   await UsersCollection.findOneAndUpdate({ email, _id }, { activated: true });
 
-  // return await SessionsCollection.create({
-  //   userId: user._id,
-  //   ...getTokensData(),
-  // });
+  return await SessionsCollection.create({
+    userId: user._id,
+    ...getTokensData(),
+  });
 };
 
 //LOGIN_USER//
@@ -109,9 +109,8 @@ export const loginUser = async ({ email, password }) => {
     throw createHttpError(401, 'Wrong password');
   }
 
-  // if (!user?.activated) {
-  //   return { isActivated: user?.activated };
-  // }
+  if (!user?.activated) {
+  }
 
   await SessionsCollection.deleteOne({ userId: user._id });
 
