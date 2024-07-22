@@ -5,8 +5,8 @@
     "token_uri": "https://oauth2.googleapis.com/token",
     "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
     "redirect_uris": [
-      "http://localhost:3000/project-digitall3.0-r/tracker",
-      "https://zymbsis.github.io/project-digitall3.0-r/tracker"
+      "http://localhost:3000/project-digitall3.0-r",
+      "https://zymbsis.github.io/project-digitall3.0-r"
     ]
   }
 }
