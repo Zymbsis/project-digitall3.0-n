@@ -109,7 +109,8 @@ export const loginUser = async ({ email, password }) => {
     throw createHttpError(401, 'Wrong password');
   }
 
-  if (!user?.activated) {
+  if (!user.activated) {
+    throw createHttpError(404, 'Please, activate your accout first.');
   }
 
   await SessionsCollection.deleteOne({ userId: user._id });
@@ -182,10 +183,16 @@ export const updateUser = async (_id, payload, options = {}) => {
 export const getUsersCount = async () => await UsersCollection.countDocuments();
 
 export const requestActivation = async (expiredActivationToken) => {
-  const { email } = jwt.decode(
-    expiredActivationToken,
-    env(ENV_VARS.JWT_SECRET),
-  );
+  let decodedToken;
+  try {
+    decodedToken = jwt.decode(expiredActivationToken, env(ENV_VARS.JWT_SECRET));
+  } catch (error) {
+    if (error instanceof Error)
+      throw createHttpError(401, 'Activation token expired or invalid');
+    throw error;
+  }
+
+  const { email } = decodedToken;
 
   const user = await UsersCollection.findOne({ email });
 
