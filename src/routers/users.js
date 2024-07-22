@@ -1,22 +1,29 @@
 import { Router } from 'express';
+
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
-import {
-  activateUserSchema,
-  registerUserSchema,
-  updateUserSchema,
-} from '../validation/users.js';
+
 import {
   getCurrentUserController,
   registerUserController,
+  loginUserController,
+  refreshUserSessionController,
   updateUserController,
+  logoutUserController,
   getUsersCountController,
   activateUserController,
+  getGoogleOAuthUrlController,
+  loginWithGoogleController,
 } from '../controllers/users.js';
+
+import {
+  activateUserSchema,
+  registerUserSchema,
+  loginUserSchema,
+  updateUserSchema,
+  loginWithGoogleOAuthSchema,
+} from '../validation/users.js';
+
 import { validateBody } from '../middlewares/validateBody.js';
-import { loginUserSchema } from '../validation/users.js';
-import { loginUserController } from '../controllers/users.js';
-import { logoutUserController } from '../controllers/users.js';
-import { refreshUserSessionController } from '../controllers/users.js';
 import { authenticate } from '../middlewares/authenticate.js';
 import { upload } from '../middlewares/uploadMiddleware.js';
 import { validateSession } from '../middlewares/validateSession.js';
@@ -27,6 +34,14 @@ import { validateSession } from '../middlewares/validateSession.js';
 // import { resetPasswordController } from '../controllers/auth.js';
 
 const router = Router();
+
+router.get('/get-oauth-url', ctrlWrapper(getGoogleOAuthUrlController));
+
+router.post(
+  '/confirm-oauth',
+  validateBody(loginWithGoogleOAuthSchema),
+  ctrlWrapper(loginWithGoogleController),
+);
 
 router.post(
   '/register',

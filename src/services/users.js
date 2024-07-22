@@ -1,20 +1,48 @@
 import bcrypt from 'bcrypt';
 import createHttpError from 'http-errors';
+import jwt from 'jsonwebtoken';
 import { UsersCollection } from '../db/models/user.js';
 import { SessionsCollection } from '../db/models/session.js';
 import { Water } from '../db/models/water.js';
 import { getTokensData } from '../utils/getTokensData.js';
-import jwt from 'jsonwebtoken';
 import { env } from '../utils/env.js';
 import { ENV_VARS } from '../constants/index.js';
 import { getMailTemplate } from '../utils/getMailTemplate.js';
 import { sendMail } from '../utils/sendMail.js';
 import { getLocalDateString } from '../utils/getLocalDateString.js';
+import {
+  getNameFromGoogleTokenPayload,
+  validateCode,
+} from '../utils/googleOAuth2.js';
 
 // import { TEMPLATES_DIR } from '../constants/index.js';
 // import path from 'node:path';
 // import fs from 'node:fs/promises';
 // import { ctrlWrapper } from '../utils/ctrlWrapper.js';
+
+export const loginOrSignupWithGoogle = async (code) => {
+  const loginTicket = await validateCode(code);
+  const payload = loginTicket.getPayload();
+  if (!payload) throw createHttpError(401);
+
+  let user = await UsersCollection.findOne({ email: payload.email });
+  if (!user) {
+    const password = await bcrypt.hash(randomBytes(10), 10);
+
+    user = await UsersCollection.create({
+      email: payload.email,
+      name: getNameFromGoogleTokenPayload(payload),
+      password,
+    });
+  }
+
+  const newSession = createSession();
+
+  return await SessionsCollection.create({
+    userId: user._id,
+    ...newSession,
+  });
+};
 
 //REGISTER_USER//
 export const registerUser = async (payload) => {
@@ -33,11 +61,11 @@ export const registerUser = async (payload) => {
   });
 };
 
-export const activateUser = async (token) => {
+export const activateUser = async (activationToken) => {
   let entries;
 
   try {
-    entries = jwt.verify(token, env(ENV_VARS.JWT_SECRET));
+    entries = jwt.verify(activationToken, env(ENV_VARS.JWT_SECRET));
   } catch (err) {
     if (err instanceof Error)
       throw createHttpError(401, 'Activation token expired or invalid');
@@ -56,20 +84,16 @@ export const activateUser = async (token) => {
   }
 
   if (user.activated) {
-    return await SessionsCollection.create({
-      userId: user._id,
-      ...getTokensData(),
-    });
+    throw createHttpError(
+      409,
+      'Account has already been activated. Please, sign in',
+    );
   }
 
-  const activatedUser = await UsersCollection.findOneAndUpdate(
-    { email, _id },
-    { activated: true },
-    { new: true },
-  );
+  await UsersCollection.findOneAndUpdate({ email, _id }, { activated: true });
 
   return await SessionsCollection.create({
-    userId: activatedUser._id,
+    userId: user._id,
     ...getTokensData(),
   });
 };
@@ -77,6 +101,7 @@ export const activateUser = async (token) => {
 //LOGIN_USER//
 export const loginUser = async ({ email, password }) => {
   const user = await UsersCollection.findOne({ email });
+
   if (!user) {
     throw createHttpError(404, 'User not found');
   }
@@ -85,6 +110,10 @@ export const loginUser = async ({ email, password }) => {
   if (!isEqual) {
     throw createHttpError(401, 'Wrong password');
   }
+
+  // if (!user?.activated) {
+  //   return { isActivated: user?.activated };
+  // }
 
   await SessionsCollection.deleteOne({ userId: user._id });
 
