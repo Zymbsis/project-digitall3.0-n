@@ -53,10 +53,41 @@ export const registerUser = async (payload) => {
 
   const encryptedPassword = await bcrypt.hash(payload.password, 10);
 
-  return await UsersCollection.create({
+  const user = await UsersCollection.create({
     ...payload,
     password: encryptedPassword,
   });
+
+  const { _id, email } = user;
+
+  const activationToken = jwt.sign(
+    { sub: _id, email },
+    env(ENV_VARS.JWT_SECRET),
+    { expiresIn: '10m' },
+  );
+
+  const domain = env(ENV_VARS.APP_DOMAIN);
+  const link = `${domain}/project-digitall3.0-r/activation?token=${activationToken}`;
+  const template = await getMailTemplate('activation-mail.html');
+  const html = template({ name: user.name, link });
+
+  try {
+    await sendMail({
+      from: env(ENV_VARS.SMTP_FROM),
+      to: email,
+      subject: 'AquaTracker: Activate your account.',
+      html,
+    });
+  } catch (error) {
+    console.error(error);
+
+    throw createHttpError(
+      500,
+      'Failed to send the email, please, try again later',
+    );
+  }
+
+  return user;
 };
 
 export const activateUser = async (activationToken) => {
@@ -110,6 +141,7 @@ export const loginUser = async ({ email, password }) => {
   }
 
   if (!user.activated) {
+    s;
     throw createHttpError(404, 'Please, activate your accout first.');
   }
 
