@@ -177,10 +177,10 @@ export const getUsersCountController = async (req, res) => {
 
 export const requestActivationController = async (req, res) => {
   const {
-    body: { email },
+    body: { activationToken },
   } = req;
 
-  await requestActivation(email);
+  await requestActivation(activationToken);
 
   res.json({
     status: 200,
