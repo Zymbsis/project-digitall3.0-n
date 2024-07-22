@@ -36,11 +36,9 @@ export const loginOrSignupWithGoogle = async (code) => {
     });
   }
 
-  const newSession = createSession();
-
   return await SessionsCollection.create({
     userId: user._id,
-    ...newSession,
+    ...getTokensData(),
   });
 };
 
@@ -92,10 +90,10 @@ export const activateUser = async (activationToken) => {
 
   await UsersCollection.findOneAndUpdate({ email, _id }, { activated: true });
 
-  return await SessionsCollection.create({
-    userId: user._id,
-    ...getTokensData(),
-  });
+  // return await SessionsCollection.create({
+  //   userId: user._id,
+  //   ...getTokensData(),
+  // });
 };
 
 //LOGIN_USER//
