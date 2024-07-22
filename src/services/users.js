@@ -110,9 +110,8 @@ export const loginUser = async ({ email, password }) => {
     throw createHttpError(401, 'Wrong password');
   }
 
-  // if (!user?.activated) {
-  //   return { isActivated: user?.activated };
-  // }
+  if (!user?.activated) {
+  }
 
   await SessionsCollection.deleteOne({ userId: user._id });
 
