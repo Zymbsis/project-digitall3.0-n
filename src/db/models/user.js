@@ -13,7 +13,7 @@ const usersSchema = new Schema(
     avatar: {
       type: String,
       default:
-        'https://res.cloudinary.com/dvkqniafr/image/upload/v1721220091/kotik_vae38k.jpg',
+        'https://asset.cloudinary.com/dvkqniafr/dbbbad0d979c8411c45cc967a322ea8d',
     },
   },
   { timestamps: true, versionKey: false },
