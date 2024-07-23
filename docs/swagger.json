@@ -1187,6 +1187,11 @@
             "example": "Valeriy Zaluzhnyi",
             "default": "User"
           },
+          "activated": {
+            "description": "Account status",
+            "type": "boolean",
+            "default": false
+          },
           "password": {
             "description": "User password",
             "minLength": 8,
