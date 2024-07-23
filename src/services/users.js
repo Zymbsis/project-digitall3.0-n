@@ -12,6 +12,7 @@ import {
   getNameFromGoogleTokenPayload,
   validateCode,
 } from '../utils/googleOAuth2.js';
+import { randomBytes } from 'crypto';
 import { decodeToken } from '../utils/decodeToken.js';
 import { verifyToken } from '../utils/verifyToken.js';
 import { mailType } from '../constants/index.js';
