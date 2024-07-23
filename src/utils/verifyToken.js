@@ -1,5 +1,5 @@
 import createHttpError from 'http-errors';
-import { ENV_VARS } from '../constants';
+import { ENV_VARS } from '../constants/index';
 import { env } from './env';
 import jwt from 'jsonwebtoken';
 
