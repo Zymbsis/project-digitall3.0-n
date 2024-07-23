@@ -12,12 +12,12 @@ import {
   requestResetPassword,
   resetPassword,
 } from '../services/users.js';
-import { addCookies } from '../utils/addCookies.js';
-import { removeCookies } from '../utils/removeCookies.js';
+import { addCookies } from '../utils/handleCookies/addCookies.js';
+import { removeCookies } from '../utils/handleCookies/removeCookies.js';
 import { env } from '../utils/env.js';
 import { generateAuthUrl } from '../utils/googleOAuth2.js';
-import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
-import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
+import { saveFileToCloudinary } from '../utils/handleFiles/saveFileToCloudinary.js';
+import { saveFileToUploadDir } from '../utils/handleFiles/saveFileToUploadDir.js';
 
 export const getGoogleOAuthUrlController = async (req, res) => {
   const url = generateAuthUrl();

@@ -1,10 +1,10 @@
 import nodemailer from 'nodemailer';
 import createHttpError from 'http-errors';
 
-import { env } from './env.js';
-import { ENV_VARS } from '../constants/index.js';
+import { env } from '../env.js';
+import { ENV_VARS } from '../../constants/index.js';
 import { getMailTemplate } from './getMailTemplate.js';
-import { encodeToken } from './encodeToken.js';
+import { encodeToken } from '../handleTokens/encodeToken.js';
 
 const transporter = nodemailer.createTransport({
   host: env(ENV_VARS.SMTP_HOST),
