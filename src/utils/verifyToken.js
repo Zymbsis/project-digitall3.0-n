@@ -1,3 +1,6 @@
+import createHttpError from 'http-errors';
+import jwt from 'jsonwebtoken';
+
 export const verifyToken = (token) => {
   try {
     return jwt.verify(token, env(ENV_VARS.JWT_SECRET));
