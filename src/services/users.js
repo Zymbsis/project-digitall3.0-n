@@ -1,13 +1,11 @@
 import bcrypt from 'bcrypt';
 import createHttpError from 'http-errors';
-import jwt from 'jsonwebtoken';
+
 import { UsersCollection } from '../db/models/user.js';
 import { SessionsCollection } from '../db/models/session.js';
 import { Water } from '../db/models/water.js';
+
 import { getTokensData } from '../utils/getTokensData.js';
-import { env } from '../utils/env.js';
-import { ENV_VARS } from '../constants/index.js';
-import { getMailTemplate } from '../utils/getMailTemplate.js';
 import { sendMail } from '../utils/sendMail.js';
 import { getLocalDateString } from '../utils/getLocalDateString.js';
 import {
@@ -15,16 +13,18 @@ import {
   validateCode,
 } from '../utils/googleOAuth2.js';
 import { randomBytes } from 'crypto';
+import { decodeToken } from '../utils/decodeToken.js';
+import { verifyToken } from '../utils/verifyToken.js';
+import { mailType } from '../constants/index.js';
 
-// import { TEMPLATES_DIR } from '../constants/index.js';
-// import path from 'node:path';
-// import fs from 'node:fs/promises';
-// import { ctrlWrapper } from '../utils/ctrlWrapper.js';
-
+// GOOGLE_OAUTH_2 //
 export const loginOrSignupWithGoogle = async (code) => {
   const loginTicket = await validateCode(code);
   const payload = loginTicket.getPayload();
-  if (!payload) throw createHttpError(401);
+
+  if (!payload) {
+    throw createHttpError(401);
+  }
 
   let user = await UsersCollection.findOne({ email: payload.email });
   if (!user) {
@@ -43,11 +43,12 @@ export const loginOrSignupWithGoogle = async (code) => {
   });
 };
 
-//REGISTER_USER//
+// REGISTER_USER //
 export const registerUser = async (payload) => {
   const isExistingUser = await UsersCollection.findOne({
     email: payload.email,
   });
+
   if (isExistingUser) {
     throw createHttpError(409, 'Email is already in use');
   }
@@ -59,48 +60,13 @@ export const registerUser = async (payload) => {
     password: encryptedPassword,
   });
 
-  const { _id, email } = user;
-
-  const activationToken = jwt.sign(
-    { sub: _id, email },
-    env(ENV_VARS.JWT_SECRET),
-    { expiresIn: '10m' },
-  );
-
-  const domain = env(ENV_VARS.APP_DOMAIN);
-  const link = `${domain}/project-digitall3.0-r/activation?token=${activationToken}`;
-  const template = await getMailTemplate('activation-mail.html');
-  const html = template({ name: user.name, link });
-
-  try {
-    await sendMail({
-      from: env(ENV_VARS.SMTP_FROM),
-      to: email,
-      subject: 'AquaTracker: Activate your account.',
-      html,
-    });
-  } catch (error) {
-    console.error(error);
-
-    throw createHttpError(
-      500,
-      'Failed to send the email, please, try again later',
-    );
-  }
-
+  sendMail(mailType.activation, user);
   return user;
 };
 
-export const activateUser = async (activationToken) => {
-  let entries;
-
-  try {
-    entries = jwt.verify(activationToken, env(ENV_VARS.JWT_SECRET));
-  } catch (err) {
-    if (err instanceof Error)
-      throw createHttpError(401, 'Activation token expired or invalid');
-    throw err;
-  }
+// ACTIVATE_USER //
+export const activateUser = async (token) => {
+  const entries = verifyToken(token);
 
   const { sub: _id, email } = entries;
 
@@ -128,7 +94,7 @@ export const activateUser = async (activationToken) => {
   });
 };
 
-//LOGIN_USER//
+// LOGIN_USER //
 export const loginUser = async ({ email, password }) => {
   const user = await UsersCollection.findOne({ email });
 
@@ -137,6 +103,7 @@ export const loginUser = async ({ email, password }) => {
   }
 
   const isEqual = await bcrypt.compare(password, user.password);
+
   if (!isEqual) {
     throw createHttpError(401, 'Wrong password');
   }
@@ -153,13 +120,12 @@ export const loginUser = async ({ email, password }) => {
   });
 };
 
-//LOGOUT_USER//
+// LOGOUT_USER //
 export const logoutUser = async (_id) => {
   await SessionsCollection.deleteOne({ _id });
 };
 
-//REFRESH_USER//
-
+// REFRESH_USER //
 export const refreshUserSession = async (_id, refreshToken) => {
   const session = await SessionsCollection.findOne({
     _id,
@@ -175,7 +141,7 @@ export const refreshUserSession = async (_id, refreshToken) => {
   return await SessionsCollection.create({ userId, ...getTokensData() });
 };
 
-//GET_CURRENT_USER//
+// GET_CURRENT_USER //
 export const getCurrentUser = async (_id) => {
   const user = await UsersCollection.findOne({ _id });
   if (!user) {
@@ -184,7 +150,7 @@ export const getCurrentUser = async (_id) => {
   return user;
 };
 
-//UPDATE_USER//
+// UPDATE_USER //
 export const updateUser = async (_id, payload, options = {}) => {
   const user = await UsersCollection.findOne({ _id });
 
@@ -212,18 +178,12 @@ export const updateUser = async (_id, payload, options = {}) => {
   return updatedUser;
 };
 
+// COUNT_USER //
 export const getUsersCount = async () => await UsersCollection.countDocuments();
 
+// REQUEST_ACTIVATION //
 export const requestActivation = async (expiredActivationToken) => {
-  let decodedToken;
-  try {
-    decodedToken = jwt.decode(expiredActivationToken, env(ENV_VARS.JWT_SECRET));
-  } catch (error) {
-    if (error instanceof Error)
-      throw createHttpError(401, 'Activation token expired or invalid');
-    throw error;
-  }
-
+  const decodedToken = decodeToken(expiredActivationToken);
   const { email } = decodedToken;
 
   const user = await UsersCollection.findOne({ email });
@@ -232,95 +192,37 @@ export const requestActivation = async (expiredActivationToken) => {
     throw createHttpError(404, 'User not found');
   }
 
-  const newActivationToken = jwt.sign(
-    { sub: user._id, email },
-    env(ENV_VARS.JWT_SECRET),
-    { expiresIn: '10m' },
-  );
-
-  const domain = env(ENV_VARS.APP_DOMAIN);
-  const link = `${domain}/project-digitall3.0-r/activation?token=${newActivationToken}`;
-  const template = await getMailTemplate('activation-mail.html');
-  const html = template({ name: user.name, link });
-
-  try {
-    await sendMail({
-      from: env(ENV_VARS.SMTP_FROM),
-      to: email,
-      subject: 'AquaTracker: New activation link is here!',
-      html,
-    });
-  } catch (error) {
-    console.error(error);
-
+  if (user.activated) {
     throw createHttpError(
-      500,
-      'Failed to send the email, please, try again later',
+      409,
+      'Account has already been activated. Please, sign in',
     );
   }
+
+  sendMail(mailType.activation, user);
 };
 
-// export const requestResetToken = async (email) => {
-//   const user = await UsersCollection.findOne({ email });
+// REQUEST_RESET_PASSWORD //
+export const requestResetPassword = async (email) => {
+  const user = await UsersCollection.findOne({ email });
 
-//   if (!user) throw createHttpError(404, 'User not found.');
+  if (!user) throw createHttpError(404, 'User not found.');
 
-//   const resetToken = jwt.sign(
-//     { sub: user._id, email },
-//     env(ENV_VARS.JWT_SECRET),
-//     {
-//       expiresIn: '15m',
-//     },
-//   );
-//   const domain = env(ENV_VARS.APP_DOMAIN);
-//   const { name } = user;
-//   const link = `${domain}/auth/reset-password?token=${resetToken}`;
+  sendMail(mailType.resetPassword, user);
+};
 
-//   const template = await getMailTemplate('reset-password-mail.html');
-//   const html = template({ name, link });
+// RESET_PASSWORD //
+export const resetPassword = async ({ token, password }) => {
+  const entries = verifyToken(token);
+  const { sub: _id, email } = entries;
 
-//   try {
-//     await sendMail({
-//       from: env(ENV_VARS.SMTP_FROM),
-//       to: email,
-//       subject: 'Reset your password / Contacts App',
-//       html,
-//     });
-//     console.log('resetToken : ', resetToken);
-//   } catch (error) {
-//     console.error(error);
+  const user = await UsersCollection.findOne({ email, _id });
 
-//     throw createHttpError(
-//       500,
-//       'Failed to send the email, please try again later.',
-//     );
-//   }
-// };
+  if (!user) {
+    throw createHttpError(404, 'User not found');
+  }
 
-// export const resetPassword = async (payload) => {
-//   let entries;
+  const encryptedPassword = await bcrypt.hash(password, 10);
 
-//   try {
-//     entries = jwt.verify(payload.token, env('JWT_SECRET'));
-//   } catch (err) {
-//     if (err instanceof Error)
-//       throw createHttpError(401, 'Token is expired or invalid.');
-//     throw err;
-//   }
-
-//   const user = await UsersCollection.findOne({
-//     email: entries.email,
-//     _id: entries.sub,
-//   });
-
-//   if (!user) {
-//     throw createHttpError(404, 'User not found');
-//   }
-
-//   const encryptedPassword = await bcrypt.hash(payload.password, 10);
-
-//   await UsersCollection.updateOne(
-//     { _id: user._id },
-//     { password: encryptedPassword },
-//   );
-// };
+  await UsersCollection.updateOne({ _id }, { password: encryptedPassword });
+};

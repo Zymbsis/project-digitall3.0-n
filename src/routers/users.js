@@ -14,6 +14,8 @@ import {
   getGoogleOAuthUrlController,
   loginWithGoogleController,
   requestActivationController,
+  requestResetPasswordController,
+  resetPasswordController,
 } from '../controllers/users.js';
 
 import {
@@ -22,6 +24,8 @@ import {
   loginUserSchema,
   updateUserSchema,
   loginWithGoogleOAuthSchema,
+  requestResetPasswordSchema,
+  resetPasswordSchema,
 } from '../validation/users.js';
 
 import { validateBody } from '../middlewares/validateBody.js';
@@ -88,16 +92,16 @@ router.post(
   ctrlWrapper(requestActivationController),
 );
 
-// router.post(
-//   '/send-reset-email',
-//   validateBody(requestResetEmailSchema),
-//   ctrlWrapper(requestResetEmailController),
-// );
+router.post(
+  '/request-reset-password',
+  validateBody(requestResetPasswordSchema),
+  ctrlWrapper(requestResetPasswordController),
+);
 
-// router.post(
-//   '/reset-pwd',
-//   validateBody(resetPasswordSchema),
-//   ctrlWrapper(resetPasswordController),
-// );
+router.post(
+  '/reset-pwd',
+  validateBody(resetPasswordSchema),
+  ctrlWrapper(resetPasswordController),
+);
 
 export default router;
