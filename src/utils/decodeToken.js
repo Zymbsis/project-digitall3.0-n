@@ -1,7 +1,8 @@
 import createHttpError from 'http-errors';
+import jwt from 'jsonwebtoken';
+
 import { ENV_VARS } from '../constants/index.js';
 import { env } from './env.js';
-import jwt from 'jsonwebtoken';
 
 export const decodeToken = (token) => {
   try {
