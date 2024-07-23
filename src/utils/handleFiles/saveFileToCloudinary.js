@@ -1,6 +1,6 @@
 import cloudinary from 'cloudinary';
-import { env } from './env.js';
-import { ENV_VARS } from '../constants/index.js';
+import { env } from '../env.js';
+import { ENV_VARS } from '../../constants/index.js';
 import fs from 'node:fs/promises';
 import { saveFileToUploadDir } from './saveFileToUploadDir.js';
 

@@ -5,16 +5,16 @@ import { UsersCollection } from '../db/models/user.js';
 import { SessionsCollection } from '../db/models/session.js';
 import { Water } from '../db/models/water.js';
 
-import { getTokensData } from '../utils/getTokensData.js';
-import { sendMail } from '../utils/sendMail.js';
+import { getTokensData } from '../utils/handleTokens/getTokensData.js';
+import { sendMail } from '../utils/handleMails/sendMail.js';
 import { getLocalDateString } from '../utils/getLocalDateString.js';
 import {
   getNameFromGoogleTokenPayload,
   validateCode,
 } from '../utils/googleOAuth2.js';
 import { randomBytes } from 'crypto';
-import { decodeToken } from '../utils/decodeToken.js';
-import { verifyToken } from '../utils/verifyToken.js';
+import { decodeToken } from '../utils/handleTokens/decodeToken.js';
+import { verifyToken } from '../utils/handleTokens/verifyToken.js';
 import { mailType } from '../constants/index.js';
 
 // GOOGLE_OAUTH_2 //

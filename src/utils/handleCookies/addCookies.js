@@ -1,4 +1,4 @@
-import { ONE_MONTH } from '../constants/index.js';
+import { ONE_MONTH } from '../../constants/index.js';
 
 export const addCookies = (res, session) => {
   const { _id, refreshToken } = session;
