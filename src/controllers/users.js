@@ -9,6 +9,8 @@ import {
   activateUser,
   requestActivation,
   loginOrSignupWithGoogle,
+  requestResetPassword,
+  resetPassword,
 } from '../services/users.js';
 import { addCookies } from '../utils/addCookies.js';
 import { env } from '../utils/env.js';
@@ -16,9 +18,6 @@ import { generateAuthUrl } from '../utils/googleOAuth2.js';
 import { removeCookies } from '../utils/removeCookies.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
-
-// import { requestResetToken } from '../services/auth.js';
-// import { resetPassword } from '../services/auth.js';
 
 export const getGoogleOAuthUrlController = async (req, res) => {
   const url = generateAuthUrl();
@@ -76,15 +75,6 @@ export const loginUserController = async (req, res) => {
 
   const session = await loginUser(body);
   const { accessToken } = session;
-  // const { accessToken, isActivated } = session;
-
-  // if (!isActivated) {
-  //   res.json({
-  //     status: 401,
-  //     message: 'Please, activate your account.',
-  //     data: {},
-  //   });
-  // }
 
   addCookies(res, session);
 
@@ -109,7 +99,7 @@ export const logoutUserController = async (req, res) => {
   res.status(204).send();
 };
 
-export const refreshUserSessionController = async (req, res, next) => {
+export const refreshUserSessionController = async (req, res) => {
   const {
     cookies: { sessionId, refreshToken },
   } = req;
@@ -188,20 +178,28 @@ export const requestActivationController = async (req, res) => {
   });
 };
 
-// export const requestResetEmailController = async (req, res) => {
-//   await requestResetToken(req.body.email);
-//   res.json({
-//     status: 200,
-//     message: 'Reset password email has been successfully sent.',
-//     data: {},
-//   });
-// };
+export const requestResetPasswordController = async (req, res) => {
+  const {
+    body: { email },
+  } = req;
 
-// export const resetPasswordController = async (req, res) => {
-//   await resetPassword(req.body);
-//   res.json({
-//     status: 200,
-//     message: 'Password was successfully reset.',
-//     data: {},
-//   });
-// };
+  await requestResetPassword(email);
+
+  res.json({
+    status: 200,
+    message: 'Email has been successfully sent.',
+    data: {},
+  });
+};
+
+export const resetPasswordController = async (req, res) => {
+  const { body } = req;
+
+  await resetPassword(body);
+
+  res.json({
+    status: 200,
+    message: 'Password has been changed with success.',
+    data: {},
+  });
+};
