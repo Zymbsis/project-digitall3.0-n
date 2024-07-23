@@ -13,9 +13,9 @@ import {
   resetPassword,
 } from '../services/users.js';
 import { addCookies } from '../utils/addCookies.js';
+import { removeCookies } from '../utils/removeCookies.js';
 import { env } from '../utils/env.js';
 import { generateAuthUrl } from '../utils/googleOAuth2.js';
-import { removeCookies } from '../utils/removeCookies.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
 

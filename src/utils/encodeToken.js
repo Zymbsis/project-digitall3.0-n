@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+
 import { ENV_VARS } from '../constants/index.js';
 import { env } from './env.js';
 
